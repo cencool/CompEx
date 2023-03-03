@@ -1,0 +1,14 @@
+*.ppu
+*.o
+*.a
+*.lps
+*.or
+*.rst
+*.compiled
+
+backup/
+*.exe
+compiler
+lib/
+
+
