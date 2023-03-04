@@ -14,27 +14,12 @@ uses {$IFDEF UNIX}
   Lexer,
   Parser;
 
-var
-  subor: Text;
 
 const
   filename = 'in.txt';
 
 begin
-  assignfile(subor, filename);
-  reset(subor);
-  while read_line(subor) do
-  begin
-    advance();
-    while lookahead <> EMPTY do
-    begin
-      writeln(lookahead);
-      advance();
-    end;
-    writeln(lookahead);
-  end;
-  WriteLn('Press any key..');
-  readkey();
+  parse(filename);
 end.
 
 

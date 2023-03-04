@@ -7,7 +7,7 @@ interface
 
 type
   token = (NONE, NUMBER, IDENTIFIER, PLUS, MINUS, MULTIPLY, DIVIDE, LEFT_PARENS,
-    RIGHT_PARENS, UNKNOWN, EMPTY);
+    RIGHT_PARENS, UNKNOWN, LINE_END);
 
 var
   current_line: string = '';
@@ -22,7 +22,7 @@ function read_line(var src_file: Text): boolean;
 procedure read_char();
 procedure peek_char();
 procedure advance();
-procedure match(checked_token:token);
+procedure match(checked_token: token);
 
 
 implementation
@@ -83,29 +83,29 @@ begin
     '+': begin
       lookahead := PLUS;
       Exit();
-    End;
+    end;
     '-': begin
       lookahead := MINUS;
       Exit();
-    End;
+    end;
     '*': begin
       lookahead := MULTIPLY;
       Exit();
-    End;
+    end;
     '/': begin
       lookahead := DIVIDE;
       Exit();
-    End;
+    end;
     '(': begin
       lookahead := LEFT_PARENS;
       Exit();
-    End;
+    end;
     ')': begin
       lookahead := RIGHT_PARENS;
       Exit();
-    End;
+    end;
     '': begin
-      lookahead := EMPTY;
+      lookahead := LINE_END;
       Exit();
     end;
   end;
@@ -113,37 +113,39 @@ begin
   if IsDigit(utf8decode(current_char), 1) then
   begin
     peek_char();
-    while (peeked_char <> '') and (IsDigit(utf8decode(peeked_char),1)) do begin
+    while (peeked_char <> '') and (IsDigit(utf8decode(peeked_char), 1)) do
+    begin
       read_char();
       peek_char();
-    End;
+    end;
     lookahead := NUMBER;
     Exit();
   end;
   {check for identifier }
-  if IsLetter(utf8decode(current_char),1) then
+  if IsLetter(utf8decode(current_char), 1) then
   begin
     peek_char();
-    while (peeked_char <> '') and (IsLetterOrDigit(UTF8Decode(peeked_char),1)) do begin
+    while (peeked_char <> '') and (IsLetterOrDigit(UTF8Decode(peeked_char), 1)) do
+    begin
       read_char();
       peek_char();
-    End;
+    end;
     lookahead := IDENTIFIER;
     Exit();
-  End;
-  lookahead:= UNKNOWN;
+  end;
+  lookahead := UNKNOWN;
   Exit();
 end;
 
-procedure match(checked_token:token);
+procedure match(checked_token: token);
 begin
-  if checked_token = lookahead  then
-  advance()
-  else begin
-    writeln('Syntax error in line:'+current_line);
-    Exit();
-  End;
-End;
+  if checked_token = lookahead then
+    advance()
+  else
+  begin
+    raise Exception.Create('Syntax error in line:' + IntToStr(current_line_number));
+  end;
+end;
 
 
 
