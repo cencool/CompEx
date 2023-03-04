@@ -7,7 +7,7 @@ interface
 
 type
   token = (NONE, NUMBER, IDENTIFIER, PLUS, MINUS, MULTIPLY, DIVIDE, LEFT_PARENS,
-    RIGHT_PARENS, UNKNOWN, LINE_END);
+    RIGHT_PARENS, SEMICOLON, LINE_END, UNKNOWN);
 
 var
   current_line: string = '';
@@ -104,6 +104,10 @@ begin
       lookahead := RIGHT_PARENS;
       Exit();
     end;
+    ';': begin
+      lookahead := SEMICOLON;
+      Exit();
+    end;
     '': begin
       lookahead := LINE_END;
       Exit();
@@ -138,12 +142,17 @@ begin
 end;
 
 procedure match(checked_token: token);
+var
+  token_name: string;
 begin
   if checked_token = lookahead then
     advance()
   else
   begin
-    raise Exception.Create('Syntax error in line:' + IntToStr(current_line_number));
+    WriteStr(token_name, checked_token);
+    raise Exception.Create('Syntax error in line:' +
+      IntToStr(current_line_number) + LineEnding + token_name +
+      ' expected' + LineEnding + current_line);
   end;
 end;
 

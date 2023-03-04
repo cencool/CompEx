@@ -8,6 +8,7 @@ uses
   Classes, SysUtils, Lexer, Crt;
 
 procedure parse(fileName: string);
+procedure statements();
 procedure expr();
 procedure term();
 procedure factor();
@@ -23,22 +24,36 @@ var
 begin
   assignFile(src_file, fileName);
   reset(src_file);
-  writeln('Parsing starts');
   while read_line(src_file) do
   begin
     advance();
     try
-      if lookahead <> LINE_END then expr();
+      statements();
     except
       on E: Exception do
       begin
         writeln(E.message);
-        writeln('Parsing finished with Errors');
         Exit;
       end;
     end;
   end;
   WriteLn('Parsing finished with OK result');
+end;
+
+procedure statements();
+begin
+  case lookahead of
+    LINE_END: begin
+      Exit();
+    end;
+    else
+    begin
+      expr();
+      match(SEMICOLON);
+      statements();
+    end;
+  end;
+
 end;
 
 procedure expr();
@@ -66,15 +81,6 @@ begin
       term();
       expr_rest();
     end;
-    MULTIPLY: ;
-    DIVIDE: ;
-    LINE_END: ;
-    RIGHT_PARENS: ;
-    else
-    begin
-      raise Exception.Create('Syntax error in line:' + IntToStr(current_line_number));
-    end;
-
   end;
 end;
 
@@ -91,16 +97,6 @@ begin
       factor();
       term_rest();
     end;
-    PLUS: ;
-    MINUS: ;
-    LINE_END: ;
-    RIGHT_PARENS: ;
-
-    else
-    begin
-      raise Exception.Create('Syntax error in line:' + IntToStr(current_line_number));
-    end;
-
   end;
 end;
 
@@ -120,7 +116,9 @@ begin
     end;
     else
     begin
-      raise Exception.Create('Syntax error in line:' + IntToStr(current_line_number));
+      raise Exception.Create('Syntax error in line: ' +
+        IntToStr(current_line_number) + LineEnding +
+        'Num or Identifier or Left parens expected' + LineEnding + current_line);
     end;
   end;
 end;
