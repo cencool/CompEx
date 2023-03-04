@@ -29,7 +29,6 @@ begin
     advance();
     try
       if lookahead <> LINE_END then expr();
-      match(LINE_END);
     except
       on E: Exception do
       begin
@@ -67,6 +66,14 @@ begin
       term();
       expr_rest();
     end;
+    MULTIPLY: ;
+    DIVIDE: ;
+    LINE_END: ;
+    RIGHT_PARENS: ;
+    else
+    begin
+      raise Exception.Create('Syntax error in line:' + IntToStr(current_line_number));
+    end;
 
   end;
 end;
@@ -83,6 +90,15 @@ begin
       match(DIVIDE);
       factor();
       term_rest();
+    end;
+    PLUS: ;
+    MINUS: ;
+    LINE_END: ;
+    RIGHT_PARENS: ;
+
+    else
+    begin
+      raise Exception.Create('Syntax error in line:' + IntToStr(current_line_number));
     end;
 
   end;
