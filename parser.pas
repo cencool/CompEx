@@ -28,13 +28,14 @@ begin
   reset(src_file);
   while read_line(src_file) do
   begin
-    write(current_line+' => ');
+    Write(current_line + ' => ');
     advance();
     try
       statements();
     except
       on E: Exception do
       begin
+        writeln();
         writeln(E.message);
         Exit;
       end;
@@ -45,7 +46,7 @@ end;
 
 procedure statements();
 begin
-  case lookahead.name of
+  case lookahead.Name of
     LINE_END: begin
       writeln();
       Exit();
@@ -75,7 +76,7 @@ end;
 
 procedure expr_rest();
 begin
-  case lookahead.name of
+  case lookahead.Name of
     PLUS: begin
       match(PLUS);
       term();
@@ -93,7 +94,7 @@ end;
 
 procedure term_rest();
 begin
-  case lookahead.name of
+  case lookahead.Name of
     MULTIPLY: begin
       match(MULTIPLY);
       factor();
@@ -111,14 +112,14 @@ end;
 
 procedure factor();
 begin
-  case lookahead.name of
+  case lookahead.Name of
     NUMBER: begin
       match(NUMBER);
-      Write(lookahead.lexeme+' ');
+      Write(lookahead.lexeme + ' ');
     end;
     IDENTIFIER: begin
       match(IDENTIFIER);
-      Write(lookahead.lexeme+' ');
+      Write(lookahead.lexeme + ' ');
     end;
     LEFT_PARENS: begin
       match(LEFT_PARENS);
@@ -127,9 +128,10 @@ begin
     end;
     else
     begin
-      raise Exception.Create('Syntax error in line: ' +
-        IntToStr(current_line_number) + LineEnding +
-        'Num or Identifier or Left parens expected' + LineEnding + current_line);
+      raise Exception.Create('Syntax error in : ' +
+        IntToStr(current_line_number) + ',' + IntToStr(char_position) +
+        LineEnding + 'Num or Identifier or Left parens expected' +
+        LineEnding + current_line);
     end;
   end;
 end;
