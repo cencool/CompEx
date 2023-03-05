@@ -6,8 +6,13 @@ interface
 
 
 type
-  token = (NONE, NUMBER, IDENTIFIER, PLUS, MINUS, MULTIPLY, DIVIDE, LEFT_PARENS,
+  token_name = (NONE, NUMBER, IDENTIFIER, PLUS, MINUS, MULTIPLY, DIVIDE, LEFT_PARENS,
     RIGHT_PARENS, SEMICOLON, LINE_END, UNKNOWN);
+
+  TToken = record
+    Name: token_name;
+    lexeme: string;
+  end;
 
 var
   current_line: string = '';
@@ -16,13 +21,13 @@ var
   char_position: word = 0;
   current_char: string = '';
   peeked_char: string = '';
-  lookahead: token = NONE;
+  lookahead: TToken = (Name: NONE; lexeme: '');
 
 function read_line(var src_file: Text): boolean;
 procedure read_char();
 procedure peek_char();
 procedure advance();
-procedure match(checked_token: token);
+procedure match(checked_token: token_name);
 
 
 implementation
@@ -81,71 +86,76 @@ begin
     read_char();
   case current_char of
     '+': begin
-      lookahead := PLUS;
+      lookahead.Name := PLUS;
       Exit();
     end;
     '-': begin
-      lookahead := MINUS;
+      lookahead.Name := MINUS;
       Exit();
     end;
     '*': begin
-      lookahead := MULTIPLY;
+      lookahead.Name := MULTIPLY;
       Exit();
     end;
     '/': begin
-      lookahead := DIVIDE;
+      lookahead.Name := DIVIDE;
       Exit();
     end;
     '(': begin
-      lookahead := LEFT_PARENS;
+      lookahead.Name := LEFT_PARENS;
       Exit();
     end;
     ')': begin
-      lookahead := RIGHT_PARENS;
+      lookahead.Name := RIGHT_PARENS;
       Exit();
     end;
     ';': begin
-      lookahead := SEMICOLON;
+      lookahead.Name := SEMICOLON;
       Exit();
     end;
     '': begin
-      lookahead := LINE_END;
+      lookahead.Name := LINE_END;
       Exit();
     end;
   end;
   {check for integer number }
   if IsDigit(utf8decode(current_char), 1) then
   begin
+    lookahead.lexeme := current_char;
     peek_char();
     while (peeked_char <> '') and (IsDigit(utf8decode(peeked_char), 1)) do
     begin
       read_char();
+      lookahead.lexeme := lookahead.lexeme + current_char;
       peek_char();
     end;
-    lookahead := NUMBER;
+    lookahead.Name := NUMBER;
     Exit();
   end;
   {check for identifier }
   if IsLetter(utf8decode(current_char), 1) then
   begin
+    lookahead.lexeme := current_char;
     peek_char();
     while (peeked_char <> '') and (IsLetterOrDigit(UTF8Decode(peeked_char), 1)) do
     begin
       read_char();
+      lookahead.lexeme := lookahead.lexeme + current_char;
       peek_char();
     end;
-    lookahead := IDENTIFIER;
+    lookahead.Name := IDENTIFIER;
     Exit();
   end;
-  lookahead := UNKNOWN;
+  lookahead.Name := UNKNOWN;
+  lookahead.lexeme := current_char;
   Exit();
 end;
 
-procedure match(checked_token: token);
+procedure match(checked_token: token_name);
 var
   token_name: string;
 begin
-  if checked_token = lookahead then
+  if checked_token = lookahead.name then
     advance()
   else
   begin

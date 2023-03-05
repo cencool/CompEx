@@ -4,8 +4,7 @@ unit Parser;
 
 interface
 
-uses
-  Classes, SysUtils, Lexer, Crt;
+
 
 procedure parse(fileName: string);
 procedure statements();
@@ -18,6 +17,9 @@ procedure term_rest();
 
 implementation
 
+uses
+  Classes, SysUtils, Lexer;
+
 procedure parse(fileName: string);
 var
   src_file: Text;
@@ -26,6 +28,7 @@ begin
   reset(src_file);
   while read_line(src_file) do
   begin
+    write(current_line+' => ');
     advance();
     try
       statements();
@@ -42,14 +45,16 @@ end;
 
 procedure statements();
 begin
-  case lookahead of
+  case lookahead.name of
     LINE_END: begin
+      writeln();
       Exit();
     end;
     else
     begin
       expr();
       match(SEMICOLON);
+      Write(';');
       statements();
     end;
   end;
@@ -70,44 +75,50 @@ end;
 
 procedure expr_rest();
 begin
-  case lookahead of
+  case lookahead.name of
     PLUS: begin
       match(PLUS);
       term();
       expr_rest();
+      Write('+');
     end;
     MINUS: begin
       match(MINUS);
       term();
       expr_rest();
+      Write('-');
     end;
   end;
 end;
 
 procedure term_rest();
 begin
-  case lookahead of
+  case lookahead.name of
     MULTIPLY: begin
       match(MULTIPLY);
       factor();
       term_rest();
+      Write('*');
     end;
     DIVIDE: begin
       match(DIVIDE);
       factor();
       term_rest();
+      Write('/');
     end;
   end;
 end;
 
 procedure factor();
 begin
-  case lookahead of
+  case lookahead.name of
     NUMBER: begin
       match(NUMBER);
+      Write(lookahead.lexeme+' ');
     end;
     IDENTIFIER: begin
       match(IDENTIFIER);
+      Write(lookahead.lexeme+' ');
     end;
     LEFT_PARENS: begin
       match(LEFT_PARENS);

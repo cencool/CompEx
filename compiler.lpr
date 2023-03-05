@@ -7,11 +7,6 @@ uses {$IFDEF UNIX}
   Classes,
   { you can add units after this }
   SysUtils,
-  LazUTF8,
-  Character,
-  Crt,
-  Trees,
-  Lexer,
   Parser;
 
 
