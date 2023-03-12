@@ -8,11 +8,11 @@ interface
 
 procedure parse(fileName: string);
 procedure statements();
-procedure expr();
-procedure term();
-procedure factor();
-procedure expr_rest();
-procedure term_rest();
+function expr(): single;
+function term(): single;
+function factor(): single;
+function expr_rest(semi: single): single;
+function term_rest(semi: single): single;
 
 
 implementation
@@ -53,7 +53,7 @@ begin
     end;
     else
     begin
-      expr();
+      write(' = ' + FloatToStr(expr()));
       match(SEMICOLON);
       Write(';');
       statements();
@@ -62,68 +62,77 @@ begin
 
 end;
 
-procedure expr();
+function expr(): single;
 begin
-  term();
-  expr_rest();
+  Result := expr_rest(term());
+  //expr_rest();
 end;
 
-procedure term();
+function term(): single;
+var
+  i: single;
 begin
-  factor();
-  term_rest();
+  i := factor();
+  Result := term_rest(i);
+  //term_rest();
 end;
 
-procedure expr_rest();
+function expr_rest(semi: single): single;
 begin
   case lookahead.Name of
     PLUS: begin
       match(PLUS);
-      term();
-      expr_rest();
+      Result := expr_rest(semi + term());
+      //expr_rest();
       Write('+');
     end;
     MINUS: begin
       match(MINUS);
-      term();
-      expr_rest();
+      Result := expr_rest(semi - term());
+      //expr_rest();
       Write('-');
     end;
+    else
+      Result := semi;
   end;
 end;
 
-procedure term_rest();
+function term_rest(semi: single): single;
 begin
   case lookahead.Name of
     MULTIPLY: begin
       match(MULTIPLY);
-      factor();
-      term_rest();
+      Result := term_rest(semi * factor());
+      //term_rest();
       Write('*');
     end;
     DIVIDE: begin
       match(DIVIDE);
-      factor();
-      term_rest();
+      Result := term_rest(semi / factor());
+      //term_rest();
       Write('/');
     end;
+    else
+      Result := semi;
   end;
 end;
 
-procedure factor();
+function factor(): single;
 begin
   case lookahead.Name of
     NUMBER: begin
       match(NUMBER);
+      Result := (strtofloat(lookahead.lexeme));
       Write(lookahead.lexeme + ' ');
     end;
     IDENTIFIER: begin
       match(IDENTIFIER);
+      Result := 1.0;
       Write(lookahead.lexeme + ' ');
     end;
     LEFT_PARENS: begin
       match(LEFT_PARENS);
-      expr();
+      Result := expr();
       match(RIGHT_PARENS);
     end;
     else
