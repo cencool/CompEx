@@ -123,11 +123,24 @@ begin
   begin
     lookahead.lexeme := current_char;
     peek_char();
-    while (peeked_char <> '') and (IsDigit(utf8decode(peeked_char), 1)) do
+    while (peeked_char <> '') and (IsDigit(utf8decode(peeked_char), 1)) and
+      (peeked_char <> '.') do
     begin
       read_char();
       lookahead.lexeme := lookahead.lexeme + current_char;
       peek_char();
+    end;
+    if peeked_char = '.' then
+    begin
+      read_char();
+      lookahead.lexeme := lookahead.lexeme + current_char;
+      peek_char();
+      while (peeked_char <> '') and (IsDigit(utf8decode(peeked_char), 1)) do
+      begin
+        read_char();
+        lookahead.lexeme := lookahead.lexeme + current_char;
+        peek_char();
+      end;
     end;
     lookahead.Name := NUMBER;
     Exit();
@@ -155,7 +168,7 @@ procedure match(checked_token: token_name);
 var
   token_name: string;
 begin
-  if checked_token = lookahead.name then
+  if checked_token = lookahead.Name then
     advance()
   else
   begin
