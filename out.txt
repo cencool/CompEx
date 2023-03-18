@@ -1,0 +1,31 @@
+(a + b); => a b + = 2;
+Line
+ statements
+  expr
+   term
+    factor
+     LEFT_PARENS
+      (
+     expr
+      term
+       factor
+        IDENTIFIER
+         a
+       term_rest
+      expr_rest
+       PLUS
+        +
+       term
+        factor
+         IDENTIFIER
+          b
+        term_rest
+       expr_rest
+     RIGHT_PARENS
+      )
+    term_rest
+   expr_rest
+  SEMICOLON
+   ;
+
+Parsing finished with OK result

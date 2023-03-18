@@ -5,6 +5,7 @@ unit Lexer;
 interface
 
 
+
 type
   token_name = (NONE, NUMBER, IDENTIFIER, PLUS, MINUS, MULTIPLY, DIVIDE, LEFT_PARENS,
     RIGHT_PARENS, SEMICOLON, LINE_END, UNKNOWN);
@@ -33,7 +34,7 @@ procedure match(checked_token: token_name);
 implementation
 
 uses
-  Classes, SysUtils, LazUTF8, Character;
+  Classes, SysUtils, LazUTF8, Character, Parser;
 
 function read_line(var src_file: Text): boolean;
 
@@ -87,34 +88,49 @@ begin
   case current_char of
     '+': begin
       lookahead.Name := PLUS;
+      lookahead.lexeme := current_char;
       Exit();
     end;
     '-': begin
       lookahead.Name := MINUS;
+      lookahead.lexeme := current_char;
+
       Exit();
     end;
     '*': begin
       lookahead.Name := MULTIPLY;
+      lookahead.lexeme := current_char;
+
       Exit();
     end;
     '/': begin
       lookahead.Name := DIVIDE;
+      lookahead.lexeme := current_char;
+
       Exit();
     end;
     '(': begin
       lookahead.Name := LEFT_PARENS;
+      lookahead.lexeme := current_char;
+
       Exit();
     end;
     ')': begin
       lookahead.Name := RIGHT_PARENS;
+      lookahead.lexeme := current_char;
+
       Exit();
     end;
     ';': begin
       lookahead.Name := SEMICOLON;
+      lookahead.lexeme := current_char;
+
       Exit();
     end;
     '': begin
       lookahead.Name := LINE_END;
+      lookahead.lexeme := current_char;
+
       Exit();
     end;
   end;
@@ -167,9 +183,17 @@ end;
 procedure match(checked_token: token_name);
 var
   token_name: string;
+  MyNodePtr: ParseNodePtr;
 begin
   if checked_token = lookahead.Name then
-    advance()
+  begin
+    MyNodePtr := SharedNodePtr;
+    MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+
+    SharedNodePtr^.display_text := lookahead.lexeme;
+    advance();    { #todo : preco netlaci samotne znamienka ? ale opakuje cislo  }
+
+  end
   else
   begin
     WriteStr(token_name, checked_token);

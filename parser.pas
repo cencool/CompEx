@@ -4,7 +4,18 @@ unit Parser;
 
 interface
 
+uses
+  Classes, SysUtils, Lexer;
 
+type
+  TParseNode = record
+    display_text: string;
+    ChildrenList: TList;
+  end;
+  ParseNodePtr = ^TParseNode;
+
+var
+  SharedNodePtr: ParseNodePtr;
 
 procedure parse(fileName: string);
 procedure statements();
@@ -13,24 +24,56 @@ function term(): single;
 function factor(): single;
 function expr_rest(semi: single): single;
 function term_rest(semi: single): single;
+function CreateParseNode(var NodePtr: ParseNodePtr): ParseNodePtr;
 
 
 implementation
 
-uses
-  Classes, SysUtils, Lexer;
+function CreateParseNode(var NodePtr: ParseNodePtr): ParseNodePtr;
+begin
+  new(NodePtr);
+  NodePtr^.ChildrenList := TList.Create();
+  NodePtr^.display_text := '';
+  Result := NodePtr;
+end;
+
+procedure PrintParseTree(node: ParseNodePtr; space_count: word);
+var
+  children_count: integer = 0;
+  i: integer = 0;
+begin
+  children_count := node^.ChildrenList.Count;
+  //if (children_count = integer(nil)) then children_count := 0;
+  for i := 1 to space_count do
+  begin
+    Write(' ');
+  end;
+  writeln(node^.display_text);
+  for i := 0 to (children_count - 1) do
+  begin
+    PrintParseTree(node^.ChildrenList.Items[i], space_count + 1);
+  end;
+end;
 
 procedure parse(fileName: string);
 var
   src_file: Text;
+  ParseTreePtr: ParseNodePtr;
+
 begin
   assignFile(src_file, fileName);
   reset(src_file);
   while read_line(src_file) do
   begin
+    ParseTreePtr := CreateParseNode(SharedNodePtr);
+    CreateParseNode(SharedNodePtr);
+    ParseTreePtr^.display_text := 'Line';
+    ParseTreePtr^.ChildrenList.add(SharedNodePtr);
+
     Write(current_line + ' => ');
     advance();
     try
+      SharedNodePtr^.display_text := 'statements';
       statements();
     except
       on E: Exception do
@@ -40,57 +83,97 @@ begin
         Exit;
       end;
     end;
+    PrintParseTree(ParseTreePtr, 0);
+    writeln();
   end;
   WriteLn('Parsing finished with OK result');
 end;
 
 procedure statements();
+var
+  StmtNodePtr: ParseNodePtr;
 begin
-  case lookahead.Name of
-    LINE_END: begin
-      writeln();
-      Exit();
-    end;
-    else
-    begin
-      write(' = ' + FloatToStr(expr()));
-      match(SEMICOLON);
-      Write(';');
-      statements();
-    end;
-  end;
+  StmtNodePtr := SharedNodePtr;
+  while lookahead.Name <> LINE_END do
 
+  begin
+    StmtNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+    SharedNodePtr^.display_text := 'expr';
+
+    Write(' = ' + FloatToStr(expr()));
+    StmtNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+    SharedNodePtr^.display_text := 'SEMICOLON';
+    match(SEMICOLON);
+    Write(';');
+    //statements();
+  end;
+  writeln();
+  Exit();
 end;
 
 function expr(): single;
+var
+  MyNodePtr: ParseNodePtr;
+  i: single;
 begin
-  Result := expr_rest(term());
+  MyNodePtr := SharedNodePtr;
+  MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+  SharedNodePtr^.display_text := 'term';
+  i := term();
+  MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+  SharedNodePtr^.display_text := 'expr_rest';
+  Result := expr_rest(i);
   //expr_rest();
 end;
 
 function term(): single;
 var
+  MyNodePtr: ParseNodePtr;
   i: single;
 begin
+  MyNodePtr := SharedNodePtr;
+  MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+  SharedNodePtr^.display_text := 'factor';
   i := factor();
+  MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+  SharedNodePtr^.display_text := 'term_rest';
   Result := term_rest(i);
   //term_rest();
 end;
 
 function expr_rest(semi: single): single;
+var
+  MyNodePtr: ParseNodePtr;
+  i: single;
 begin
   case lookahead.Name of
     PLUS: begin
+      MyNodePtr := SharedNodePtr;
+      MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+      SharedNodePtr^.display_text := 'PLUS';
       match(PLUS);
-      Result := expr_rest(semi + term());
+      MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+      SharedNodePtr^.display_text := 'term';
+      i := semi + term();
+      MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+      SharedNodePtr^.display_text := 'expr_rest';
+      Result := expr_rest(i);
       //expr_rest();
-      Write('+');
+      Write('+'); //postfix semantic action
     end;
     MINUS: begin
+      MyNodePtr := SharedNodePtr;
+      MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+      SharedNodePtr^.display_text := 'MINUS';
       match(MINUS);
-      Result := expr_rest(semi - term());
+      MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+      SharedNodePtr^.display_text := 'term';
+      i := semi - term();
+      SharedNodePtr^.display_text := 'expr_rest';
+      Result := expr_rest(i);
+      Result := expr_rest(i);
       //expr_rest();
-      Write('-');
+      Write('-');     //postfix semantic action
     end;
     else
       Result := semi;
@@ -98,19 +181,38 @@ begin
 end;
 
 function term_rest(semi: single): single;
+var
+  MyNodePtr: ParseNodePtr;
+  i: single;
 begin
   case lookahead.Name of
     MULTIPLY: begin
+      MyNodePtr := SharedNodePtr;
+      MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+      SharedNodePtr^.display_text := 'MULTIPLY';
       match(MULTIPLY);
-      Result := term_rest(semi * factor());
+      MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+      SharedNodePtr^.display_text := 'factor';
+      i := semi * factor();
+      MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+      SharedNodePtr^.display_text := 'term_rest';
+      Result := term_rest(i);
       //term_rest();
-      Write('*');
+      Write('*');    //postfix semantic action
     end;
     DIVIDE: begin
+      MyNodePtr := SharedNodePtr;
+      MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+      SharedNodePtr^.display_text := 'DIVIDE';
       match(DIVIDE);
-      Result := term_rest(semi / factor());
+      MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+      SharedNodePtr^.display_text := 'factor';
+      i := semi / factor();
+      MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+      SharedNodePtr^.display_text := 'term_rest';
+      Result := term_rest(i);
       //term_rest();
-      Write('/');
+      Write('/');        //postfix semantic action
     end;
     else
       Result := semi;
@@ -118,21 +220,39 @@ begin
 end;
 
 function factor(): single;
+var
+  MyNodePtr: ParseNodePtr;
 begin
   case lookahead.Name of
     NUMBER: begin
-      match(NUMBER);
+      MyNodePtr := SharedNodePtr;
+      MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+      SharedNodePtr^.display_text := 'NUMBER';
       Result := (strtofloat(lookahead.lexeme));
       Write(lookahead.lexeme + ' ');
+
+      match(NUMBER);
+
     end;
     IDENTIFIER: begin
+      MyNodePtr := SharedNodePtr;
+      MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+      SharedNodePtr^.display_text := 'IDENTIFIER';
+      Write(lookahead.lexeme + ' ');
+
       match(IDENTIFIER);
       Result := 1.0;
-      Write(lookahead.lexeme + ' ');
     end;
     LEFT_PARENS: begin
+      MyNodePtr := SharedNodePtr;
+      MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+      SharedNodePtr^.display_text := 'LEFT_PARENS';
       match(LEFT_PARENS);
+      MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+      SharedNodePtr^.display_text := 'expr';
       Result := expr();
+      MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+      SharedNodePtr^.display_text := 'RIGHT_PARENS';
       match(RIGHT_PARENS);
     end;
     else

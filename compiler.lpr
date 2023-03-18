@@ -10,7 +10,6 @@ uses {$IFDEF UNIX}
   Contnrs,
   Parser;
 
-
 const
   filename = 'in.txt';
 
