@@ -63,7 +63,7 @@ begin
   Inc(char_position);
   if char_position <= current_line_length then
   begin
-    current_char := current_line[char_position];
+    current_char := utf8copy(current_line, char_position, 1);
   end
   else
   begin
@@ -74,7 +74,7 @@ end;
 procedure peek_char();
 begin
   if char_position < current_line_length then
-    peeked_char := current_line[char_position + 1]
+    peeked_char := UTF8copy(current_line, char_position + 1, 1)
   else
     peeked_char := '';
 
@@ -146,6 +146,7 @@ begin
       lookahead.lexeme := lookahead.lexeme + current_char;
       peek_char();
     end;
+    {check for decimal number }
     if peeked_char = '.' then
     begin
       read_char();

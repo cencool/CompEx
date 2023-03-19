@@ -67,7 +67,7 @@ begin
   begin
     ParseTreePtr := CreateParseNode(SharedNodePtr);
     CreateParseNode(SharedNodePtr);
-    ParseTreePtr^.display_text := 'Line';
+    ParseTreePtr^.display_text := 'Parse tree of line:'+IntToStr(current_line_number);
     ParseTreePtr^.ChildrenList.add(SharedNodePtr);
 
     Write(current_line + ' => ');

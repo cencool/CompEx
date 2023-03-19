@@ -10,9 +10,16 @@ uses {$IFDEF UNIX}
   Contnrs,
   Parser;
 
+var
+  MyList: TStringList;
+  i: integer;
+  s : string;
 const
   filename = 'in.txt';
 
 begin
   parse(filename);
+  MyList := TStringList.Create;
+  MyList.LoadFromFile(filename);
+  writeln(MyList.Capacity);
 end.
