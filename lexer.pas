@@ -15,6 +15,7 @@ type
     lexeme: string;
   end;
 
+
 var
   current_line: string = '';
   current_line_length: word = 0;
@@ -36,14 +37,14 @@ implementation
 uses
   Classes, SysUtils, LazUTF8, Character, Parser;
 
-function read_line(var src_file: Text): boolean;
 
+function read_line(var src_file: Text): boolean;
 begin
   if not EOF(src_file) then
   begin
     ReadLn(src_file, current_line);
     Inc(current_line_number);
-    current_line_length := length(current_line);
+    current_line_length := UTF8length(current_line);
     char_position := 0;
     Result := True;
   end
