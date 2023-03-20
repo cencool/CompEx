@@ -4,7 +4,8 @@ unit Lexer;
 
 interface
 
-
+uses
+  Classes;
 
 type
   token_name = (NONE, NUMBER, IDENTIFIER, PLUS, MINUS, MULTIPLY, DIVIDE, LEFT_PARENS,
@@ -18,14 +19,17 @@ type
 
 var
   current_line: string = '';
+  peeked_line: string = '';
   current_line_length: word = 0;
   current_line_number: word = 0;
+  peeked_line_length: word = 0;
   char_position: word = 0;
   current_char: string = '';
   peeked_char: string = '';
   lookahead: TToken = (Name: NONE; lexeme: '');
 
-function read_line(var src_file: Text): boolean;
+function read_line(src: TStringList): boolean;
+function peek_line(src: TStringList): boolean;
 procedure read_char();
 procedure peek_char();
 procedure advance();
@@ -35,14 +39,13 @@ procedure match(checked_token: token_name);
 implementation
 
 uses
-  Classes, SysUtils, LazUTF8, Character, Parser;
+  SysUtils, LazUTF8, Character, Parser;
 
-
-function read_line(var src_file: Text): boolean;
+function read_line(src: TStringList): boolean;
 begin
-  if not EOF(src_file) then
+  if (current_line_number < src.Count) then
   begin
-    ReadLn(src_file, current_line);
+    current_line := src.Strings[current_line_number];
     Inc(current_line_number);
     current_line_length := UTF8length(current_line);
     char_position := 0;
@@ -59,6 +62,22 @@ begin
 
 end;
 
+function peek_line(src: TStringList): boolean;
+begin
+  if (current_line_number < src.Count) then
+  begin
+    peeked_line := src.Strings[current_line_number];
+    peeked_line_length := UTF8Length(peeked_line);
+    Result := True;
+  end
+  else
+  begin
+    Result := False;
+    peeked_line := '';
+    peeked_line_length := 0;
+  end;
+end;
+
 procedure read_char();
 begin
   Inc(char_position);
@@ -66,6 +85,8 @@ begin
   begin
     current_char := utf8copy(current_line, char_position, 1);
   end
+  else
+  if read_line(src_lines) then read_char()
   else
   begin
     current_char := '';
@@ -77,7 +98,14 @@ begin
   if char_position < current_line_length then
     peeked_char := UTF8copy(current_line, char_position + 1, 1)
   else
+  if peek_line(src_lines) then
+  begin
+    peeked_char := UTF8copy(peeked_line, 1, 1);
+  end
+  else
+  begin
     peeked_char := '';
+  end;
 
 end;
 

@@ -1,4 +1,4 @@
 (ač + búla) ; 5/8 => ač búla + = 2;5 8 / = 0.625
-Syntax error in line:1
+Syntax error in line:2
 SEMICOLON expected
-(ač + búla) ; 5/8
+3*(2+1);

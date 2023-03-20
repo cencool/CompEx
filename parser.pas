@@ -5,7 +5,7 @@ unit Parser;
 interface
 
 uses
-  Classes, SysUtils, Lexer;
+  Classes, SysUtils, LazUTF8,Lexer;
 
 type
   TParseNode = record
@@ -16,6 +16,7 @@ type
 
 var
   SharedNodePtr: ParseNodePtr;
+  src_lines: TStringList;
 
 procedure parse(fileName: string);
 procedure statements();
@@ -60,32 +61,35 @@ var
   src_file: Text;
   ParseTreePtr: ParseNodePtr;
 
-begin
-  assignFile(src_file, fileName);
-  reset(src_file);
-  while read_line(src_file) do
-  begin
-    ParseTreePtr := CreateParseNode(SharedNodePtr);
-    CreateParseNode(SharedNodePtr);
-    ParseTreePtr^.display_text := 'Parse tree of line:'+IntToStr(current_line_number);
-    ParseTreePtr^.ChildrenList.add(SharedNodePtr);
 
-    Write(current_line + ' => ');
-    advance();
-    try
-      SharedNodePtr^.display_text := 'statements';
-      statements();
-    except
-      on E: Exception do
-      begin
-        writeln();
-        writeln(E.message);
-        Exit;
-      end;
+begin
+  //assignFile(src_file, fileName);
+  //reset(src_file);
+
+  src_lines := TStringList.Create;
+  src_lines.LoadFromFile(fileName);
+  read_line(src_lines);
+
+  ParseTreePtr := CreateParseNode(SharedNodePtr);
+  CreateParseNode(SharedNodePtr);
+  ParseTreePtr^.ChildrenList.add(SharedNodePtr);
+
+  Write(current_line + ' => ');
+  advance();
+  try
+    SharedNodePtr^.display_text := 'statements';
+    statements();
+  except
+    on E: Exception do
+    begin
+      writeln();
+      writeln(E.message);
+      Exit;
     end;
-    PrintParseTree(ParseTreePtr, 0);
-    writeln();
   end;
+  PrintParseTree(ParseTreePtr, 0);
+  writeln();
+
   WriteLn('Parsing finished with OK result');
 end;
 
