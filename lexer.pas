@@ -86,6 +86,8 @@ begin
     current_char := utf8copy(current_line, char_position, 1);
   end
   else
+  if (char_position - current_line_length) = 1 then current_char := LineEnding
+  else
   if read_line(src_lines) then read_char()
   else
   begin
@@ -97,6 +99,8 @@ procedure peek_char();
 begin
   if char_position < current_line_length then
     peeked_char := UTF8copy(current_line, char_position + 1, 1)
+  else
+  if char_position = current_line_length then peeked_char := LineEnding
   else
   if peek_line(src_lines) then
   begin
@@ -112,7 +116,8 @@ end;
 procedure advance();
 begin
   read_char();
-  while (current_char <> '') and (IsWhiteSpace(utf8decode(current_char), 1)) do
+  while (current_char <> '') and (IsWhiteSpace(utf8decode(current_char), 1) or
+      (current_char = LineEnding)) do
     read_char();
   case current_char of
     '+': begin
