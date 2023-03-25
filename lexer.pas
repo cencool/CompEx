@@ -11,9 +11,12 @@ type
   token_name = (NONE, NUMBER, IDENTIFIER, PLUS, MINUS, MULTIPLY, DIVIDE, LEFT_PARENS,
     RIGHT_PARENS, SEMICOLON, LINE_END, UNKNOWN);
 
-  TToken = record
+  { TToken }
+
+  TToken = class
     Name: token_name;
-    lexeme: string;
+    Lexeme: string;
+    constructor Create();
   end;
 
 
@@ -26,7 +29,7 @@ var
   char_position: word = 0;
   current_char: string = '';
   peeked_char: string = '';
-  lookahead: TToken = (Name: NONE; lexeme: '');
+  lookahead: TToken;
 
 function read_line(src: TStringList): boolean;
 function peek_line(src: TStringList): boolean;
@@ -34,6 +37,7 @@ procedure read_char();
 procedure peek_char();
 procedure advance();
 procedure match(checked_token: token_name);
+procedure is_number(negative: boolean);
 
 
 implementation
@@ -55,7 +59,6 @@ begin
   begin
     current_line_length := 0;
     current_line := '';
-    current_line_number := 0;
     char_position := 0;
     Result := False;
   end;
@@ -122,96 +125,100 @@ begin
   case current_char of
     '+': begin
       lookahead.Name := PLUS;
-      lookahead.lexeme := current_char;
+      lookahead.Lexeme := current_char;
       Exit();
     end;
     '-': begin
       lookahead.Name := MINUS;
-      lookahead.lexeme := current_char;
-
+      lookahead.Lexeme := current_char;
       Exit();
     end;
     '*': begin
       lookahead.Name := MULTIPLY;
-      lookahead.lexeme := current_char;
+      lookahead.Lexeme := current_char;
 
       Exit();
     end;
     '/': begin
       lookahead.Name := DIVIDE;
-      lookahead.lexeme := current_char;
+      lookahead.Lexeme := current_char;
 
       Exit();
     end;
     '(': begin
       lookahead.Name := LEFT_PARENS;
-      lookahead.lexeme := current_char;
+      lookahead.Lexeme := current_char;
 
       Exit();
     end;
     ')': begin
       lookahead.Name := RIGHT_PARENS;
-      lookahead.lexeme := current_char;
+      lookahead.Lexeme := current_char;
 
       Exit();
     end;
     ';': begin
       lookahead.Name := SEMICOLON;
-      lookahead.lexeme := current_char;
+      lookahead.Lexeme := current_char;
 
       Exit();
     end;
     '': begin
       lookahead.Name := LINE_END;
-      lookahead.lexeme := current_char;
+      lookahead.Lexeme := current_char;
 
       Exit();
     end;
   end;
   {check for integer number }
+
   if IsDigit(utf8decode(current_char), 1) then
   begin
-    lookahead.lexeme := current_char;
+    lookahead.Lexeme := current_char;
     peek_char();
     while (peeked_char <> '') and (IsDigit(utf8decode(peeked_char), 1)) and
       (peeked_char <> '.') do
     begin
       read_char();
-      lookahead.lexeme := lookahead.lexeme + current_char;
+      lookahead.Lexeme := lookahead.Lexeme + current_char;
       peek_char();
     end;
     {check for decimal number }
     if peeked_char = '.' then
     begin
       read_char();
-      lookahead.lexeme := lookahead.lexeme + current_char;
+      lookahead.Lexeme := lookahead.Lexeme + current_char;
       peek_char();
       while (peeked_char <> '') and (IsDigit(utf8decode(peeked_char), 1)) do
       begin
         read_char();
-        lookahead.lexeme := lookahead.lexeme + current_char;
+        lookahead.Lexeme := lookahead.Lexeme + current_char;
         peek_char();
       end;
     end;
-    lookahead.Name := NUMBER;
-    Exit();
+    if not (IsLetter(UTF8Decode(peeked_char), 1)) then
+    begin
+      lookahead.Name := NUMBER;
+      Exit();
+    end;
+
   end;
   {check for identifier }
   if IsLetter(utf8decode(current_char), 1) then
   begin
-    lookahead.lexeme := current_char;
+    lookahead.Lexeme := current_char;
     peek_char();
     while (peeked_char <> '') and (IsLetterOrDigit(UTF8Decode(peeked_char), 1)) do
     begin
       read_char();
-      lookahead.lexeme := lookahead.lexeme + current_char;
+      lookahead.Lexeme := lookahead.Lexeme + current_char;
       peek_char();
     end;
     lookahead.Name := IDENTIFIER;
     Exit();
   end;
   lookahead.Name := UNKNOWN;
-  lookahead.lexeme := current_char;
+  lookahead.Lexeme := current_char;
   Exit();
 end;
 
@@ -225,8 +232,8 @@ begin
     MyNodePtr := SharedNodePtr;
     MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
 
-    SharedNodePtr^.display_text := lookahead.lexeme;
-    advance();    { #todo : preco netlaci samotne znamienka ? ale opakuje cislo  }
+    SharedNodePtr^.display_text := lookahead.Lexeme;
+    advance();
 
   end
   else
@@ -238,6 +245,45 @@ begin
   end;
 end;
 
+procedure is_number(negative: boolean);  { #todo : solve negative number processing }
+begin
+  if IsDigit(utf8decode(current_char), 1) then
+  begin
+    if negative then lookahead.Lexeme := '-' + current_char
+    else
+      lookahead.Lexeme := current_char;
+    peek_char();
+    while (peeked_char <> '') and (IsDigit(utf8decode(peeked_char), 1)) and
+      (peeked_char <> '.') do
+    begin
+      read_char();
+      lookahead.Lexeme := lookahead.Lexeme + current_char;
+      peek_char();
+    end;
+    {check for decimal number }
+    if peeked_char = '.' then
+    begin
+      read_char();
+      lookahead.Lexeme := lookahead.Lexeme + current_char;
+      peek_char();
+      while (peeked_char <> '') and (IsDigit(utf8decode(peeked_char), 1)) do
+      begin
+        read_char();
+        lookahead.Lexeme := lookahead.Lexeme + current_char;
+        peek_char();
+      end;
+    end;
+    lookahead.Name := NUMBER;
+    Exit();
+  end;
+end;
 
+{ TToken }
+
+constructor TToken.Create;
+begin
+  Name := NONE;
+  Lexeme:='';
+end;
 
 end.

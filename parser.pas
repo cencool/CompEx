@@ -44,7 +44,6 @@ var
   i: integer = 0;
 begin
   children_count := node^.ChildrenList.Count;
-  //if (children_count = integer(nil)) then children_count := 0;
   for i := 1 to space_count do
   begin
     Write(' ');
@@ -58,30 +57,28 @@ end;
 
 procedure parse(fileName: string);
 var
-  src_file: Text;
   ParseTreePtr: ParseNodePtr;
 
 
 begin
-  //assignFile(src_file, fileName);
-  //reset(src_file);
-
   src_lines := TStringList.Create;
   src_lines.LoadFromFile(fileName);
+  current_line_number := 0;
+  lookahead:= TToken.Create();
   read_line(src_lines);
 
   ParseTreePtr := CreateParseNode(SharedNodePtr);
   CreateParseNode(SharedNodePtr);
   ParseTreePtr^.ChildrenList.add(SharedNodePtr);
 
-  Write(current_line + ' => ');
-  advance();
   try
+    advance();
     SharedNodePtr^.display_text := 'statements';
     statements();
   except
     on E: Exception do
     begin
+      PrintParseTree(ParseTreePtr, 0);
       writeln();
       writeln(E.message);
       Exit;
@@ -108,8 +105,7 @@ begin
     StmtNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
     SharedNodePtr^.display_text := 'SEMICOLON';
     match(SEMICOLON);
-    Write(';');
-    //statements();
+    Writeln(';');
   end;
   writeln();
   Exit();
@@ -127,7 +123,6 @@ begin
   MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
   SharedNodePtr^.display_text := 'expr_rest';
   Result := expr_rest(i);
-  //expr_rest();
 end;
 
 function term(): single;
@@ -142,7 +137,6 @@ begin
   MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
   SharedNodePtr^.display_text := 'term_rest';
   Result := term_rest(i);
-  //term_rest();
 end;
 
 function expr_rest(semi: single): single;
@@ -162,7 +156,6 @@ begin
       MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
       SharedNodePtr^.display_text := 'expr_rest';
       Result := expr_rest(i);
-      //expr_rest();
       Write('+'); //postfix semantic action
     end;
     MINUS: begin
@@ -175,8 +168,6 @@ begin
       i := semi - term();
       SharedNodePtr^.display_text := 'expr_rest';
       Result := expr_rest(i);
-      Result := expr_rest(i);
-      //expr_rest();
       Write('-');     //postfix semantic action
     end;
     else
@@ -201,7 +192,6 @@ begin
       MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
       SharedNodePtr^.display_text := 'term_rest';
       Result := term_rest(i);
-      //term_rest();
       Write('*');    //postfix semantic action
     end;
     DIVIDE: begin
@@ -215,7 +205,6 @@ begin
       MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
       SharedNodePtr^.display_text := 'term_rest';
       Result := term_rest(i);
-      //term_rest();
       Write('/');        //postfix semantic action
     end;
     else
@@ -233,7 +222,7 @@ begin
       MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
       SharedNodePtr^.display_text := 'NUMBER';
       Result := (strtofloat(lookahead.lexeme));
-      Write(lookahead.lexeme + ' ');
+      Write(' '+lookahead.lexeme + ' ');
 
       match(NUMBER);
 
@@ -242,7 +231,7 @@ begin
       MyNodePtr := SharedNodePtr;
       MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
       SharedNodePtr^.display_text := 'IDENTIFIER';
-      Write(lookahead.lexeme + ' ');
+      Write(' '+lookahead.lexeme + ' ');
 
       match(IDENTIFIER);
       Result := 1.0;
