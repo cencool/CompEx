@@ -225,14 +225,15 @@ end;
 procedure match(checked_token: token_name);
 var
   token_name: string;
-  MyNodePtr: ParseNodePtr;
+  MyNode: TParseNode;
 begin
   if checked_token = lookahead.Name then
   begin
-    MyNodePtr := SharedNodePtr;
-    MyNodePtr^.ChildrenList.add(CreateParseNode(SharedNodePtr));
+    MyNode := SharedNode;
+    SharedNode:= TParseNode.Create();
+    MyNode.ChildrenList.add(SharedNode);
 
-    SharedNodePtr^.display_text := lookahead.Lexeme;
+    SharedNode.DisplayText := lookahead.Lexeme;
     advance();
 
   end
@@ -283,7 +284,7 @@ end;
 constructor TToken.Create;
 begin
   Name := NONE;
-  Lexeme:='';
+  Lexeme := '';
 end;
 
 end.
