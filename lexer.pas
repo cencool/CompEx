@@ -35,7 +35,7 @@ type
     PeekedChar: string;
     Lookahead: TToken;
 
-    constructor Create(const SrcFileName:string);
+    constructor Create(const SrcFileName: string);
     function ReadLine(): boolean;
     function PeekLine(src: TStringList): boolean;
     procedure ReadChar();
@@ -51,14 +51,14 @@ type
 implementation
 
 uses
-  SysUtils, LazUTF8, Character, Parser;
+  SysUtils, LazUTF8, Character;
 
-constructor TLexer.Create(const SrcFileName:string);
+constructor TLexer.Create(const SrcFileName: string);
 begin
   SrcLines := TStringList.Create;
   SrcLines.LoadFromFile(SrcFileName);
-  CurrentLineNumber:=0;
-  Lookahead:= TToken.Create();
+  CurrentLineNumber := 0;
+  Lookahead := TToken.Create();
 end;
 
 function TLexer.ReadLine(): boolean;
@@ -251,9 +251,8 @@ begin
   else
   begin
     WriteStr(token_name, checked_token);
-    raise Exception.Create('Syntax error in line:' +
-      IntToStr(CurrentLineNumber) + LineEnding + token_name +
-      ' expected' + LineEnding + CurrentLine);
+    raise Exception.Create('Syntax error in line:' + IntToStr(CurrentLineNumber) +
+      LineEnding + token_name + ' expected' + LineEnding + CurrentLine);
   end;
 end;
 

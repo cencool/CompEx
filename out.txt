@@ -1,4 +1,43 @@
-(ač + búla) ; 5/8 => ač búla + = 2;5 8 / = 0.625
-Syntax error in line:2
-SEMICOLON expected
-3*(2+1);
+ 3  41 +;
+ 2  3  4 +*;
+No more statements.
+Parsing finished with OK result
+statements
+ expr
+  term
+   factor
+    3
+   term_rest
+  expr_rest
+   +
+   term
+    factor
+     41
+    term_rest
+   expr_rest
+ ;
+ expr
+  term
+   factor
+    2
+   term_rest
+    *
+    factor
+     (
+     expr
+      term
+       factor
+        3
+       term_rest
+      expr_rest
+       +
+       term
+        factor
+         4
+        term_rest
+       expr_rest
+     )
+    term_rest
+  expr_rest
+ ;
+

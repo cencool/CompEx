@@ -13,8 +13,12 @@ uses {$IFDEF UNIX}
 
 const
   filename = 'in.txt';
+var
+
+  MyParser: TParser;
 
 begin
-  parse(filename);
+  MyParser := TParser.Create;
+  MyParser.parse(filename);
 
 end.
