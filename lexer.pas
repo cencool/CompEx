@@ -8,37 +8,42 @@ uses
   Classes;
 
 type
-  token_name = (NONE, NUMBER, IDENTIFIER, PLUS, MINUS, MULTIPLY, DIVIDE, LEFT_PARENS,
+  TTokenName = (NONE, NUMBER, IDENTIFIER, PLUS, MINUS, MULTIPLY, DIVIDE, LEFT_PARENS,
     RIGHT_PARENS, SEMICOLON, LINE_END, UNKNOWN);
 
   { TToken }
 
   TToken = class
-    Name: token_name;
+    Name: TTokenName;
     Lexeme: string;
     constructor Create();
   end;
 
 
+  { TLexer }
+
   TLexer = class
 
-    current_line: string;
-    peeked_line: string;
-    current_line_length: word;
-    current_line_number: word;
-    peeked_line_length: word;
-    char_position: word;
-    current_char: string;
-    peeked_char: string;
-    lookahead: TToken;
+    SrcLines: TStringList;
+    CurrentLine: string;
+    PeekedLine: string;
+    CurrentLineLength: word;
+    CurrentLineNumber: word;
+    PeekedLineLength: word;
+    CharPosition: word;
+    CurrentChar: string;
+    PeekedChar: string;
+    Lookahead: TToken;
 
-    function read_line(src: TStringList): boolean;
-    function peek_line(src: TStringList): boolean;
-    procedure read_char();
-    procedure peek_char();
-    procedure advance();
-    procedure match(checked_token: token_name);
-    procedure is_number(negative: boolean);
+    constructor Create(const SrcFileName:string);
+    function ReadLine(): boolean;
+    function PeekLine(src: TStringList): boolean;
+    procedure ReadChar();
+    procedure PeekChar();
+    procedure Advance();
+    procedure Match(checked_token: TTokenName);
+    procedure IsNumber(negative: boolean);
+
   end;
 
 
@@ -48,236 +53,240 @@ implementation
 uses
   SysUtils, LazUTF8, Character, Parser;
 
-function TLexer.read_line(src: TStringList): boolean;
+constructor TLexer.Create(const SrcFileName:string);
 begin
-  if (current_line_number < src.Count) then
+  SrcLines := TStringList.Create;
+  SrcLines.LoadFromFile(SrcFileName);
+  CurrentLineNumber:=0;
+  Lookahead:= TToken.Create();
+end;
+
+function TLexer.ReadLine(): boolean;
+begin
+  if (CurrentLineNumber < SrcLines.Count) then
   begin
-    current_line := src.Strings[current_line_number];
-    Inc(current_line_number);
-    current_line_length := UTF8length(current_line);
-    char_position := 0;
+    CurrentLine := SrcLines.Strings[CurrentLineNumber];
+    Inc(CurrentLineNumber);
+    CurrentLineLength := UTF8length(CurrentLine);
+    CharPosition := 0;
     Result := True;
   end
   else
   begin
-    current_line_length := 0;
-    current_line := '';
-    char_position := 0;
+    CurrentLineLength := 0;
+    CurrentLine := '';
+    CharPosition := 0;
     Result := False;
   end;
 
 end;
 
-function TLexer.peek_line(src: TStringList): boolean;
+function TLexer.PeekLine(src: TStringList): boolean;
 begin
-  if (current_line_number < src.Count) then
+  if (CurrentLineNumber < src.Count) then
   begin
-    peeked_line := src.Strings[current_line_number];
-    peeked_line_length := UTF8Length(peeked_line);
+    PeekedLine := src.Strings[CurrentLineNumber];
+    PeekedLineLength := UTF8Length(PeekedLine);
     Result := True;
   end
   else
   begin
     Result := False;
-    peeked_line := '';
-    peeked_line_length := 0;
+    PeekedLine := '';
+    PeekedLineLength := 0;
   end;
 end;
 
-procedure TLexer.read_char();
+procedure TLexer.ReadChar();
 begin
-  Inc(char_position);
-  if char_position <= current_line_length then
+  Inc(CharPosition);
+  if CharPosition <= CurrentLineLength then
   begin
-    current_char := utf8copy(current_line, char_position, 1);
+    CurrentChar := utf8copy(CurrentLine, CharPosition, 1);
   end
   else
-  if (char_position - current_line_length) = 1 then current_char := LineEnding
+  if (CharPosition - CurrentLineLength) = 1 then CurrentChar := LineEnding
   else
-  if read_line(src_lines) then read_char()
+  if ReadLine() then ReadChar()
   else
   begin
-    current_char := '';
+    CurrentChar := '';
   end;
 end;
 
-procedure TLexer.peek_char();
+procedure TLexer.PeekChar();
 begin
-  if char_position < current_line_length then
-    peeked_char := UTF8copy(current_line, char_position + 1, 1)
+  if CharPosition < CurrentLineLength then
+    PeekedChar := UTF8copy(CurrentLine, CharPosition + 1, 1)
   else
-  if char_position = current_line_length then peeked_char := LineEnding
+  if CharPosition = CurrentLineLength then PeekedChar := LineEnding
   else
-  if peek_line(src_lines) then
+  if PeekLine(SrcLines) then
   begin
-    peeked_char := UTF8copy(peeked_line, 1, 1);
+    PeekedChar := UTF8copy(PeekedLine, 1, 1);
   end
   else
   begin
-    peeked_char := '';
+    PeekedChar := '';
   end;
 
 end;
 
-procedure TLexer.advance();
+procedure TLexer.Advance();
 begin
-  read_char();
-  while (current_char <> '') and (IsWhiteSpace(utf8decode(current_char), 1) or
-      (current_char = LineEnding)) do
-    read_char();
-  case current_char of
+  ReadChar();
+  while (CurrentChar <> '') and (IsWhiteSpace(utf8decode(CurrentChar), 1) or
+      (CurrentChar = LineEnding)) do
+    ReadChar();
+  case CurrentChar of
     '+': begin
-      lookahead.Name := PLUS;
-      lookahead.Lexeme := current_char;
+      Lookahead.Name := PLUS;
+      Lookahead.Lexeme := CurrentChar;
       Exit();
     end;
     '-': begin
-      lookahead.Name := MINUS;
-      lookahead.Lexeme := current_char;
+      Lookahead.Name := MINUS;
+      Lookahead.Lexeme := CurrentChar;
       Exit();
     end;
     '*': begin
-      lookahead.Name := MULTIPLY;
-      lookahead.Lexeme := current_char;
+      Lookahead.Name := MULTIPLY;
+      Lookahead.Lexeme := CurrentChar;
 
       Exit();
     end;
     '/': begin
-      lookahead.Name := DIVIDE;
-      lookahead.Lexeme := current_char;
+      Lookahead.Name := DIVIDE;
+      Lookahead.Lexeme := CurrentChar;
 
       Exit();
     end;
     '(': begin
-      lookahead.Name := LEFT_PARENS;
-      lookahead.Lexeme := current_char;
+      Lookahead.Name := LEFT_PARENS;
+      Lookahead.Lexeme := CurrentChar;
 
       Exit();
     end;
     ')': begin
-      lookahead.Name := RIGHT_PARENS;
-      lookahead.Lexeme := current_char;
+      Lookahead.Name := RIGHT_PARENS;
+      Lookahead.Lexeme := CurrentChar;
 
       Exit();
     end;
     ';': begin
-      lookahead.Name := SEMICOLON;
-      lookahead.Lexeme := current_char;
+      Lookahead.Name := SEMICOLON;
+      Lookahead.Lexeme := CurrentChar;
 
       Exit();
     end;
     '': begin
-      lookahead.Name := LINE_END;
-      lookahead.Lexeme := current_char;
+      Lookahead.Name := LINE_END;
+      Lookahead.Lexeme := CurrentChar;
 
       Exit();
     end;
   end;
   {check for integer number }
 
-  if IsDigit(utf8decode(current_char), 1) then
+  if IsDigit(utf8decode(CurrentChar), 1) then
   begin
-    lookahead.Lexeme := current_char;
-    peek_char();
-    while (peeked_char <> '') and (IsDigit(utf8decode(peeked_char), 1)) and
-      (peeked_char <> '.') do
+    Lookahead.Lexeme := CurrentChar;
+    PeekChar();
+    while (PeekedChar <> '') and (IsDigit(utf8decode(PeekedChar), 1)) and
+      (PeekedChar <> '.') do
     begin
-      read_char();
-      lookahead.Lexeme := lookahead.Lexeme + current_char;
-      peek_char();
+      ReadChar();
+      Lookahead.Lexeme := Lookahead.Lexeme + CurrentChar;
+      PeekChar();
     end;
     {check for decimal number }
-    if peeked_char = '.' then
+    if PeekedChar = '.' then
     begin
-      read_char();
-      lookahead.Lexeme := lookahead.Lexeme + current_char;
-      peek_char();
-      while (peeked_char <> '') and (IsDigit(utf8decode(peeked_char), 1)) do
+      ReadChar();
+      Lookahead.Lexeme := Lookahead.Lexeme + CurrentChar;
+      PeekChar();
+      while (PeekedChar <> '') and (IsDigit(utf8decode(PeekedChar), 1)) do
       begin
-        read_char();
-        lookahead.Lexeme := lookahead.Lexeme + current_char;
-        peek_char();
+        ReadChar();
+        Lookahead.Lexeme := Lookahead.Lexeme + CurrentChar;
+        PeekChar();
       end;
     end;
-    if not (IsLetter(UTF8Decode(peeked_char), 1)) then
+    if not (IsLetter(UTF8Decode(PeekedChar), 1)) then
     begin
-      lookahead.Name := NUMBER;
+      Lookahead.Name := NUMBER;
       Exit();
     end;
 
   end;
   {check for identifier }
-  if IsLetter(utf8decode(current_char), 1) then
+  if IsLetter(utf8decode(CurrentChar), 1) then
   begin
-    lookahead.Lexeme := current_char;
-    peek_char();
-    while (peeked_char <> '') and (IsLetterOrDigit(UTF8Decode(peeked_char), 1)) do
+    Lookahead.Lexeme := CurrentChar;
+    PeekChar();
+    while (PeekedChar <> '') and (IsLetterOrDigit(UTF8Decode(PeekedChar), 1)) do
     begin
-      read_char();
-      lookahead.Lexeme := lookahead.Lexeme + current_char;
-      peek_char();
+      ReadChar();
+      Lookahead.Lexeme := Lookahead.Lexeme + CurrentChar;
+      PeekChar();
     end;
-    lookahead.Name := IDENTIFIER;
+    Lookahead.Name := IDENTIFIER;
     Exit();
   end;
-  lookahead.Name := UNKNOWN;
-  lookahead.Lexeme := current_char;
+  Lookahead.Name := UNKNOWN;
+  Lookahead.Lexeme := CurrentChar;
   Exit();
 end;
 
-procedure TLexer.match(checked_token: token_name);
+procedure TLexer.Match(checked_token: TTokenName);
 var
   token_name: string;
-  MyNode: TParseNode;
 begin
-  if checked_token = lookahead.Name then
+  if checked_token = Lookahead.Name then
   begin
-    MyNode := SharedNode;
-    SharedNode := TParseNode.Create();
-    MyNode.ChildrenList.add(SharedNode);
 
-    SharedNode.DisplayText := lookahead.Lexeme;
-    advance();
+    Advance();
 
   end
   else
   begin
     WriteStr(token_name, checked_token);
     raise Exception.Create('Syntax error in line:' +
-      IntToStr(current_line_number) + LineEnding + token_name +
-      ' expected' + LineEnding + current_line);
+      IntToStr(CurrentLineNumber) + LineEnding + token_name +
+      ' expected' + LineEnding + CurrentLine);
   end;
 end;
 
-procedure TLexer.is_number(negative: boolean);  { #todo : solve negative number processing }
+procedure TLexer.IsNumber(negative: boolean);
+{ #todo : solve negative number processing }
 begin
-  if IsDigit(utf8decode(current_char), 1) then
+  if IsDigit(utf8decode(CurrentChar), 1) then
   begin
-    if negative then lookahead.Lexeme := '-' + current_char
+    if negative then Lookahead.Lexeme := '-' + CurrentChar
     else
-      lookahead.Lexeme := current_char;
-    peek_char();
-    while (peeked_char <> '') and (IsDigit(utf8decode(peeked_char), 1)) and
-      (peeked_char <> '.') do
+      Lookahead.Lexeme := CurrentChar;
+    PeekChar();
+    while (PeekedChar <> '') and (IsDigit(utf8decode(PeekedChar), 1)) and
+      (PeekedChar <> '.') do
     begin
-      read_char();
-      lookahead.Lexeme := lookahead.Lexeme + current_char;
-      peek_char();
+      ReadChar();
+      Lookahead.Lexeme := Lookahead.Lexeme + CurrentChar;
+      PeekChar();
     end;
     {check for decimal number }
-    if peeked_char = '.' then
+    if PeekedChar = '.' then
     begin
-      read_char();
-      lookahead.Lexeme := lookahead.Lexeme + current_char;
-      peek_char();
-      while (peeked_char <> '') and (IsDigit(utf8decode(peeked_char), 1)) do
+      ReadChar();
+      Lookahead.Lexeme := Lookahead.Lexeme + CurrentChar;
+      PeekChar();
+      while (PeekedChar <> '') and (IsDigit(utf8decode(PeekedChar), 1)) do
       begin
-        read_char();
-        lookahead.Lexeme := lookahead.Lexeme + current_char;
-        peek_char();
+        ReadChar();
+        Lookahead.Lexeme := Lookahead.Lexeme + CurrentChar;
+        PeekChar();
       end;
     end;
-    lookahead.Name := NUMBER;
+    Lookahead.Name := NUMBER;
     Exit();
   end;
 end;
