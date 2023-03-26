@@ -20,24 +20,27 @@ type
   end;
 
 
-var
-  current_line: string = '';
-  peeked_line: string = '';
-  current_line_length: word = 0;
-  current_line_number: word = 0;
-  peeked_line_length: word = 0;
-  char_position: word = 0;
-  current_char: string = '';
-  peeked_char: string = '';
-  lookahead: TToken;
+  TLexer = class
 
-function read_line(src: TStringList): boolean;
-function peek_line(src: TStringList): boolean;
-procedure read_char();
-procedure peek_char();
-procedure advance();
-procedure match(checked_token: token_name);
-procedure is_number(negative: boolean);
+    current_line: string;
+    peeked_line: string;
+    current_line_length: word;
+    current_line_number: word;
+    peeked_line_length: word;
+    char_position: word;
+    current_char: string;
+    peeked_char: string;
+    lookahead: TToken;
+
+    function read_line(src: TStringList): boolean;
+    function peek_line(src: TStringList): boolean;
+    procedure read_char();
+    procedure peek_char();
+    procedure advance();
+    procedure match(checked_token: token_name);
+    procedure is_number(negative: boolean);
+  end;
+
 
 
 implementation
@@ -45,7 +48,7 @@ implementation
 uses
   SysUtils, LazUTF8, Character, Parser;
 
-function read_line(src: TStringList): boolean;
+function TLexer.read_line(src: TStringList): boolean;
 begin
   if (current_line_number < src.Count) then
   begin
@@ -65,7 +68,7 @@ begin
 
 end;
 
-function peek_line(src: TStringList): boolean;
+function TLexer.peek_line(src: TStringList): boolean;
 begin
   if (current_line_number < src.Count) then
   begin
@@ -81,7 +84,7 @@ begin
   end;
 end;
 
-procedure read_char();
+procedure TLexer.read_char();
 begin
   Inc(char_position);
   if char_position <= current_line_length then
@@ -98,7 +101,7 @@ begin
   end;
 end;
 
-procedure peek_char();
+procedure TLexer.peek_char();
 begin
   if char_position < current_line_length then
     peeked_char := UTF8copy(current_line, char_position + 1, 1)
@@ -116,7 +119,7 @@ begin
 
 end;
 
-procedure advance();
+procedure TLexer.advance();
 begin
   read_char();
   while (current_char <> '') and (IsWhiteSpace(utf8decode(current_char), 1) or
@@ -222,7 +225,7 @@ begin
   Exit();
 end;
 
-procedure match(checked_token: token_name);
+procedure TLexer.match(checked_token: token_name);
 var
   token_name: string;
   MyNode: TParseNode;
@@ -230,7 +233,7 @@ begin
   if checked_token = lookahead.Name then
   begin
     MyNode := SharedNode;
-    SharedNode:= TParseNode.Create();
+    SharedNode := TParseNode.Create();
     MyNode.ChildrenList.add(SharedNode);
 
     SharedNode.DisplayText := lookahead.Lexeme;
@@ -246,7 +249,7 @@ begin
   end;
 end;
 
-procedure is_number(negative: boolean);  { #todo : solve negative number processing }
+procedure TLexer.is_number(negative: boolean);  { #todo : solve negative number processing }
 begin
   if IsDigit(utf8decode(current_char), 1) then
   begin

@@ -22,6 +22,7 @@ type
 
 var
   SharedNode: TParseNode;
+  Lex : TLexer;
   src_lines: TStringList;
 
 procedure parse(fileName: string);
@@ -69,16 +70,17 @@ var
 begin
   src_lines := TStringList.Create;
   src_lines.LoadFromFile(fileName);
-  current_line_number := 0;
-  lookahead:= TToken.Create();
-  read_line(src_lines);
+  Lex := TLexer.Create;
+  Lex.current_line_number := 0;
+  Lex.lookahead:= TToken.Create();
+  Lex.read_line(src_lines);
 
   ParseTree := TParseNode.Create();
   SharedNode:= TParseNode.Create();
   ParseTree.ChildrenList.add(SharedNode);
 
   try
-    advance();
+    Lex.advance();
     SharedNode.DisplayText := 'statements';
     statements();
   except
@@ -101,7 +103,7 @@ var
   StmtNode: TParseNode;
 begin
   StmtNode := SharedNode;
-  while lookahead.Name <> LINE_END do
+  while Lex.lookahead.Name <> LINE_END do
 
   begin
     SharedNode := TParseNode.Create();
@@ -112,7 +114,7 @@ begin
     SharedNode:= TParseNode.Create();
     StmtNode.ChildrenList.add(SharedNode);
     SharedNode.DisplayText := 'SEMICOLON';
-    match(SEMICOLON);
+    Lex.match(SEMICOLON);
     Writeln(';');
   end;
   writeln();
@@ -156,13 +158,13 @@ var
   MyNode: TParseNode;
   i: single;
 begin
-  case lookahead.Name of
+  case Lex.lookahead.Name of
     PLUS: begin
       MyNode := SharedNode;
       SharedNode:= TParseNode.Create();
       MyNode.ChildrenList.add(SharedNode);
       SharedNode.DisplayText := 'PLUS';
-      match(PLUS);
+      Lex.match(PLUS);
       SharedNode:= TParseNode.Create();
       MyNode.ChildrenList.add(SharedNode);
       SharedNode.DisplayText := 'term';
@@ -178,7 +180,7 @@ begin
       SharedNode:= TParseNode.Create();
       MyNode.ChildrenList.add(SharedNode);
       SharedNode.DisplayText := 'MINUS';
-      match(MINUS);
+      Lex.match(MINUS);
       SharedNode := TParseNode.Create();
       MyNode.ChildrenList.add(SharedNode);
       SharedNode.DisplayText := 'term';
@@ -199,13 +201,13 @@ var
   MyNode: TParseNode;
   i: single;
 begin
-  case lookahead.Name of
+  case Lex.lookahead.Name of
     MULTIPLY: begin
       MyNode := SharedNode;
       SharedNode := TParseNode.Create();
       MyNode.ChildrenList.add(SharedNode);
       SharedNode.DisplayText := 'MULTIPLY';
-      match(MULTIPLY);
+      Lex.match(MULTIPLY);
       SharedNode := TParseNode.Create();
       MyNode.ChildrenList.add(SharedNode);
       SharedNode.DisplayText := 'factor';
@@ -221,7 +223,7 @@ begin
       SharedNode := TParseNode.Create();
       MyNode.ChildrenList.add(SharedNode);
       SharedNode.DisplayText := 'DIVIDE';
-      match(DIVIDE);
+      Lex.match(DIVIDE);
       SharedNode := TParseNode.Create();
       MyNode.ChildrenList.add(SharedNode);
       SharedNode.DisplayText := 'factor';
@@ -241,16 +243,16 @@ function factor(): single;
 var
   MyNode: TParseNode;
 begin
-  case lookahead.Name of
+  case Lex.lookahead.Name of
     NUMBER: begin
       MyNode := SharedNode;
       SharedNode := TParseNode.Create();
       MyNode.ChildrenList.add(SharedNode);
       SharedNode.DisplayText := 'NUMBER';
-      Result := (strtofloat(lookahead.lexeme));
-      Write(' '+lookahead.lexeme + ' ');
+      Result := (strtofloat(Lex.lookahead.lexeme));
+      Write(' '+Lex.lookahead.lexeme + ' ');
 
-      match(NUMBER);
+      Lex.match(NUMBER);
 
     end;
     IDENTIFIER: begin
@@ -258,9 +260,9 @@ begin
       SharedNode := TParseNode.Create();
       MyNode.ChildrenList.add(SharedNode);
       SharedNode.DisplayText := 'IDENTIFIER';
-      Write(' '+lookahead.lexeme + ' ');
+      Write(' '+Lex.lookahead.lexeme + ' ');
 
-      match(IDENTIFIER);
+      Lex.match(IDENTIFIER);
       Result := 1.0;
     end;
     LEFT_PARENS: begin
@@ -268,7 +270,7 @@ begin
       SharedNode := TParseNode.Create();
       MyNode.ChildrenList.add(SharedNode);
       SharedNode.DisplayText := 'LEFT_PARENS';
-      match(LEFT_PARENS);
+      Lex.match(LEFT_PARENS);
       SharedNode := TParseNode.Create();
       MyNode.ChildrenList.add(SharedNode);
       SharedNode.DisplayText := 'expr';
@@ -276,14 +278,14 @@ begin
       SharedNode := TParseNode.Create();
       MyNode.ChildrenList.add(SharedNode);
       SharedNode.DisplayText := 'RIGHT_PARENS';
-      match(RIGHT_PARENS);
+      Lex.match(RIGHT_PARENS);
     end;
     else
     begin
       raise Exception.Create('Syntax error in : ' +
-        IntToStr(current_line_number) + ',' + IntToStr(char_position) +
+        IntToStr(Lex.current_line_number) + ',' + IntToStr(Lex.char_position) +
         LineEnding + 'Num or Identifier or Left parens expected' +
-        LineEnding + current_line);
+        LineEnding + Lex.current_line);
     end;
   end;
 end;
