@@ -41,6 +41,7 @@ type
 
     constructor Create;
     procedure CreateNewNode;
+    procedure CreateNewNodeAndLink(Node: TParseNode);
     procedure parse(FileNameToParse: string);
     procedure statements();
     procedure expr();
@@ -95,6 +96,12 @@ begin
   NewNode := TParseNode.Create();
 end;
 
+procedure TParser.CreateNewNodeAndLink(Node: TParseNode);
+begin
+  CreateNewNode;
+  Node.Link(NewNode);
+end;
+
 procedure TParser.parse(FileNameToParse: string);
 
 var
@@ -104,8 +111,7 @@ begin
   Lex := TLexer.Create(FileNameToParse);
   Lex.ReadLine();
   ParseRoot := NewNode; { #todo : What display text for ParseRoot ? }
-  CreateNewNode;
-  ParseRoot.Link(NewNode);
+  CreateNewNodeAndLink(ParseRoot);
 
   try
     Lex.Advance();
@@ -121,7 +127,7 @@ begin
     end;
   end;
   PrintParseTree(ParseRoot, 0);
-  writeln();
+  WriteLn();
   WriteLn('Parsing finished with OK result');
 
 end;
@@ -136,12 +142,10 @@ begin
 
   while Lex.Lookahead.Name <> LINE_END do
   begin
-    CreateNewNode;
-    ThisNode.Link(NewNode);
+    CreateNewNodeAndLink(ThisNode);
     expr();
     //Write(' = ' + FloatToStr(expr()));
-    CreateNewNode;
-    ThisNode.Link(NewNode);
+    CreateNewNodeAndLink(ThisNode);
     NewNode.DisplayText := Lex.Lookahead.Lexeme;
     Lex.Match(SEMICOLON);
     Writeln(';');
@@ -158,11 +162,9 @@ var
 begin
   ThisNode := NewNode;
   ThisNode.DisplayText := 'expr';
-  CreateNewNode;
-  ThisNode.Link(NewNode);
+  CreateNewNodeAndLink(ThisNode);
   term();
-  CreateNewNode;
-  ThisNode.Link(NewNode);
+  CreateNewNodeAndLink(ThisNode);
   expr_rest();
 end;
 
@@ -174,11 +176,9 @@ var
 begin
   ThisNode := NewNode;
   ThisNode.DisplayText := 'term';
-  CreateNewNode;
-  ThisNode.Link(NewNode);
+  CreateNewNodeAndLink(ThisNode);
   factor();
-  CreateNewNode;
-  ThisNode.Link(NewNode);
+  CreateNewNodeAndLink(ThisNode);
   term_rest();
 end;
 
@@ -191,28 +191,22 @@ begin
 
   case Lex.Lookahead.Name of
     PLUS: begin
-      CreateNewNode;
-      ThisNode.Link(NewNode);
+      CreateNewNodeAndLink(ThisNode);
       NewNode.DisplayText := Lex.Lookahead.Lexeme;
       Lex.Match(PLUS);
-      CreateNewNode;
-      ThisNode.Link(NewNode);
+      CreateNewNodeAndLink(ThisNode);
       term();
-      CreateNewNode;
-      ThisNode.Link(NewNode);
+      CreateNewNodeAndLink(ThisNode);
       expr_rest();
       Write('+'); //postfix semantic action
     end;
     MINUS: begin
-      CreateNewNode;
-      ThisNode.Link(NewNode);
+      CreateNewNodeAndLink(ThisNode);
       NewNode.DisplayText := Lex.Lookahead.Lexeme;
       Lex.Match(MINUS);
-      CreateNewNode;
-      ThisNode.Link(NewNode);
+      CreateNewNodeAndLink(ThisNode);
       term();
-      CreateNewNode;
-      ThisNode.Link(NewNode);
+      CreateNewNodeAndLink(ThisNode);
       expr_rest();
       Write('-');     //postfix semantic action
     end;
@@ -228,27 +222,22 @@ begin
   ThisNode.DisplayText := 'term_rest';
   case Lex.Lookahead.Name of
     MULTIPLY: begin
-      CreateNewNode;
-      ThisNode.Link(NewNode);
+      CreateNewNodeAndLink(ThisNode);
       NewNode.DisplayText := Lex.Lookahead.Lexeme;
       Lex.Match(MULTIPLY);
-      CreateNewNode;
-      ThisNode.Link(NewNode);
+      CreateNewNodeAndLink(ThisNode);
       factor();
-      CreateNewNode;
-      ThisNode.Link(NewNode);
+      CreateNewNodeAndLink(ThisNode);
       term_rest();
       Write('*');    //postfix semantic action
     end;
     DIVIDE: begin
-      CreateNewNode;
-      ThisNode.Link(NewNode);
+      CreateNewNodeAndLink(ThisNode);
       NewNode.DisplayText := Lex.Lookahead.Lexeme;
       Lex.Match(DIVIDE);
-      ThisNode.Link(NewNode);
+      CreateNewNodeAndLink(ThisNode);
       factor();
-      CreateNewNode;
-      ThisNode.Link(NewNode);
+      CreateNewNodeAndLink(ThisNode);
       term_rest();
       Write('/');        //postfix semantic action
     end;
@@ -264,29 +253,24 @@ begin
   ThisNode.DisplayText := 'factor';
   case Lex.Lookahead.Name of
     NUMBER: begin
-      CreateNewNode;
-      ThisNode.Link(NewNode);
+      CreateNewNodeAndLink(ThisNode);
       NewNode.DisplayText := Lex.Lookahead.Lexeme;
       Write(' ' + Lex.Lookahead.lexeme + ' ');
       Lex.Match(NUMBER);
     end;
     IDENTIFIER: begin
-      CreateNewNode;
-      ThisNode.Link(NewNode);
+      CreateNewNodeAndLink(ThisNode);
       NewNode.DisplayText := Lex.Lookahead.Lexeme;
       Write(' ' + Lex.Lookahead.lexeme + ' ');
       Lex.Match(IDENTIFIER);
     end;
     LEFT_PARENS: begin
-      CreateNewNode;
-      ThisNode.Link(NewNode);
+      CreateNewNodeAndLink(ThisNode);
       NewNode.DisplayText := Lex.Lookahead.Lexeme;
       Lex.Match(LEFT_PARENS);
-      CreateNewNode;
-      ThisNode.Link(NewNode);
+      CreateNewNodeAndLink(ThisNode);
       expr();
-      CreateNewNode;
-      ThisNode.Link(NewNode);
+      CreateNewNodeAndLink(ThisNode);
       NewNode.DisplayText := Lex.Lookahead.Lexeme;
       Lex.Match(RIGHT_PARENS);
     end;
@@ -308,6 +292,7 @@ begin
   DisplayText := '';
   Name := '';
 end;
+
 
 procedure TParseNode.Link(Node: TParseNode);
 begin
