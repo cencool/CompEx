@@ -257,7 +257,7 @@ begin
 end;
 
 procedure TLexer.IsNumber(negative: boolean);
-{ #todo : solve negative number processing }
+{ #todo : solve negative number lexing}
 begin
   if IsDigit(utf8decode(CurrentChar), 1) then
   begin

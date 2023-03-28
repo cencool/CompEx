@@ -16,6 +16,7 @@ type
     DisplayText: string;
     ChildrenList: TList;
     constructor Create();
+    procedure Link(Node: TParseNode);
   end;
 
   TSyntaxNode = class
@@ -33,14 +34,20 @@ type
     constructor Create;
   end;
 
+  { TParser }
+
   TParser = class
+    NewNode: TParseNode;
+
+    constructor Create;
+    procedure CreateNewNode;
     procedure parse(FileNameToParse: string);
-    function statements(): TNodes;
-    function expr(): TNodes;
-    function term(): TNodes;
-    function factor(): TNodes;
-    function expr_rest(): TNodes;
-    function term_rest(): TNodes;
+    procedure statements();
+    procedure expr();
+    procedure term();
+    procedure factor();
+    procedure expr_rest();
+    procedure term_rest();
     procedure PrintParseTree(Root: TParseNode; space_count: word);
   end;
 
@@ -78,177 +85,210 @@ begin
   end;
 end;
 
+constructor TParser.Create;
+begin
+  NewNode := TParseNode.Create;
+end;
+
+procedure TParser.CreateNewNode;
+begin
+  NewNode := TParseNode.Create();
+end;
+
 procedure TParser.parse(FileNameToParse: string);
 
 var
-  TreeRoot: TNodes;
+  ParseRoot: TParseNode;
 
 begin
   Lex := TLexer.Create(FileNameToParse);
   Lex.ReadLine();
+  ParseRoot := NewNode; { #todo : What display text for ParseRoot ? }
+  CreateNewNode;
+  ParseRoot.Link(NewNode);
 
   try
     Lex.Advance();
-    TreeRoot := statements();
+    statements();
   except
     on E: Exception do
     begin
-      PrintParseTree(TreeRoot.ParseNode, 0);
+      PrintParseTree(ParseRoot, 0);
+      { #todo : how to print partial parse tree when error ? }
       writeln();
       writeln(E.message);
       Exit;
     end;
   end;
-  PrintParseTree(TreeRoot.ParseNode, 0);
+  PrintParseTree(ParseRoot, 0);
   writeln();
-
-end;
-
-function TParser.statements(): TNodes;
-var
-  TempNode: TParseNode;
-
-begin
-  Result := TNodes.Create;
-  Result.ParseNode.Name := 'statements';
-  Result.ParseNode.DisplayText := 'statements';
-  while Lex.Lookahead.Name <> LINE_END do
-  begin
-    Result.ParseNode.ChildrenList.Add(expr().ParseNode);
-    //Write(' = ' + FloatToStr(expr()));
-    TempNode := TParseNode.Create();
-    writestr(TempNode.Name, Lex.Lookahead.Name);
-    TempNode.DisplayText := Lex.Lookahead.Lexeme;
-    Lex.Match(SEMICOLON);
-    Result.ParseNode.ChildrenList.Add(TempNode);
-    Writeln(';');
-  end;
-  writeln('No more statements.');
   WriteLn('Parsing finished with OK result');
 
 end;
 
-function TParser.expr(): TNodes;
-
-begin
-  Result := TNodes.Create;
-  Result.ParseNode.Name := 'expr';
-  Result.ParseNode.DisplayText := 'expr';
-  Result.ParseNode.ChildrenList.Add(term().ParseNode);
-  Result.ParseNode.ChildrenList.Add(expr_rest().ParseNode);
-end;
-
-function TParser.term(): TNodes;
-
-begin
-  Result := TNodes.Create;
-  Result.ParseNode.Name := 'term';
-  Result.ParseNode.DisplayText := 'term';
-  Result.ParseNode.ChildrenList.Add(factor().ParseNode);
-  Result.ParseNode.ChildrenList.Add(term_rest().ParseNode);
-end;
-
-function TParser.expr_rest(): TNodes;
+procedure TParser.statements();
 var
-  TempNode: TParseNode;
+  ThisNode: TParseNode;
+
 begin
-  Result := TNodes.Create;
-  Result.ParseNode.Name := 'expr_rest';
-  Result.ParseNode.DisplayText := 'expr_rest';
+  ThisNode := NewNode;
+  ThisNode.DisplayText := 'statements';
+
+  while Lex.Lookahead.Name <> LINE_END do
+  begin
+    CreateNewNode;
+    ThisNode.Link(NewNode);
+    expr();
+    //Write(' = ' + FloatToStr(expr()));
+    CreateNewNode;
+    ThisNode.Link(NewNode);
+    NewNode.DisplayText := Lex.Lookahead.Lexeme;
+    Lex.Match(SEMICOLON);
+    Writeln(';');
+  end;
+  writeln('No more statements.');
+
+end;
+
+procedure TParser.expr;
+
+var
+  ThisNode: TParseNode;
+
+begin
+  ThisNode := NewNode;
+  ThisNode.DisplayText := 'expr';
+  CreateNewNode;
+  ThisNode.Link(NewNode);
+  term();
+  CreateNewNode;
+  ThisNode.Link(NewNode);
+  expr_rest();
+end;
+
+procedure TParser.term;
+
+var
+  ThisNode: TParseNode;
+
+begin
+  ThisNode := NewNode;
+  ThisNode.DisplayText := 'term';
+  CreateNewNode;
+  ThisNode.Link(NewNode);
+  factor();
+  CreateNewNode;
+  ThisNode.Link(NewNode);
+  term_rest();
+end;
+
+procedure TParser.expr_rest;
+var
+  ThisNode: TParseNode;
+begin
+  ThisNode := NewNode;
+  ThisNode.DisplayText := 'expr_rest';
+
   case Lex.Lookahead.Name of
     PLUS: begin
-      TempNode := TParseNode.Create();
-      writestr(TempNode.Name, Lex.Lookahead.Name);
-      TempNode.DisplayText := Lex.Lookahead.Lexeme;
+      CreateNewNode;
+      ThisNode.Link(NewNode);
+      NewNode.DisplayText := Lex.Lookahead.Lexeme;
       Lex.Match(PLUS);
-      Result.ParseNode.ChildrenList.Add(TempNode);
-      Result.ParseNode.ChildrenList.Add(term().ParseNode);
-      Result.ParseNode.ChildrenList.Add(expr_rest().ParseNode);
+      CreateNewNode;
+      ThisNode.Link(NewNode);
+      term();
+      CreateNewNode;
+      ThisNode.Link(NewNode);
+      expr_rest();
       Write('+'); //postfix semantic action
     end;
     MINUS: begin
-      TempNode := TParseNode.Create();
-      writestr(TempNode.Name, Lex.Lookahead.Name);
-      TempNode.DisplayText := Lex.Lookahead.Lexeme;
+      CreateNewNode;
+      ThisNode.Link(NewNode);
+      NewNode.DisplayText := Lex.Lookahead.Lexeme;
       Lex.Match(MINUS);
-      Result.ParseNode.ChildrenList.Add(TempNode);
-      Result.ParseNode.ChildrenList.Add(term().ParseNode);
-      Result.ParseNode.ChildrenList.Add(expr_rest().ParseNode);
+      CreateNewNode;
+      ThisNode.Link(NewNode);
+      term();
+      CreateNewNode;
+      ThisNode.Link(NewNode);
+      expr_rest();
       Write('-');     //postfix semantic action
     end;
 
   end;
 end;
 
-function TParser.term_rest(): TNodes;
+procedure TParser.term_rest;
 var
-  TempNode: TParseNode;
+  ThisNode: TParseNode;
 begin
-  Result := TNodes.Create;
-  Result.ParseNode.Name := 'term_rest';
-  Result.ParseNode.DisplayText := 'term_rest';
+  ThisNode := NewNode;
+  ThisNode.DisplayText := 'term_rest';
   case Lex.Lookahead.Name of
     MULTIPLY: begin
-      TempNode := TParseNode.Create();
-      writestr(TempNode.Name, Lex.Lookahead.Name);
-      TempNode.DisplayText := Lex.Lookahead.Lexeme;
+      CreateNewNode;
+      ThisNode.Link(NewNode);
+      NewNode.DisplayText := Lex.Lookahead.Lexeme;
       Lex.Match(MULTIPLY);
-      Result.ParseNode.ChildrenList.Add(TempNode);
-      Result.ParseNode.ChildrenList.Add(factor().ParseNode);
-      Result.ParseNode.ChildrenList.Add(term_rest().ParseNode);
+      CreateNewNode;
+      ThisNode.Link(NewNode);
+      factor();
+      CreateNewNode;
+      ThisNode.Link(NewNode);
+      term_rest();
       Write('*');    //postfix semantic action
     end;
     DIVIDE: begin
-      TempNode := TParseNode.Create();
-      writestr(TempNode.Name, Lex.Lookahead.Name);
-      TempNode.DisplayText := Lex.Lookahead.Lexeme;
+      CreateNewNode;
+      ThisNode.Link(NewNode);
+      NewNode.DisplayText := Lex.Lookahead.Lexeme;
       Lex.Match(DIVIDE);
-      Result.ParseNode.ChildrenList.Add(TempNode);
-      Result.ParseNode.ChildrenList.Add(factor().ParseNode);
-      Result.ParseNode.ChildrenList.Add(term_rest().ParseNode);
+      ThisNode.Link(NewNode);
+      factor();
+      CreateNewNode;
+      ThisNode.Link(NewNode);
+      term_rest();
       Write('/');        //postfix semantic action
     end;
 
   end;
 end;
 
-function TParser.factor(): TNodes;
+procedure TParser.factor;
 var
-  TempNode: TParseNode;
+  ThisNode: TParseNode;
 begin
-  Result := TNodes.Create;
-  Result.ParseNode.Name := 'factor';
-  Result.ParseNode.DisplayText := 'factor';
+  ThisNode := NewNode;
+  ThisNode.DisplayText := 'factor';
   case Lex.Lookahead.Name of
     NUMBER: begin
-      TempNode := TParseNode.Create();
-      writestr(TempNode.Name, Lex.Lookahead.Name);
-      TempNode.DisplayText := Lex.Lookahead.Lexeme;
+      CreateNewNode;
+      ThisNode.Link(NewNode);
+      NewNode.DisplayText := Lex.Lookahead.Lexeme;
       Write(' ' + Lex.Lookahead.lexeme + ' ');
       Lex.Match(NUMBER);
-      Result.ParseNode.ChildrenList.Add(TempNode);
-
     end;
     IDENTIFIER: begin
-      TempNode := TParseNode.Create();
-      writestr(TempNode.Name, Lex.Lookahead.Name);
-      TempNode.DisplayText := Lex.Lookahead.Lexeme;
+      CreateNewNode;
+      ThisNode.Link(NewNode);
+      NewNode.DisplayText := Lex.Lookahead.Lexeme;
       Write(' ' + Lex.Lookahead.lexeme + ' ');
       Lex.Match(IDENTIFIER);
-      Result.ParseNode.ChildrenList.Add(TempNode);
     end;
     LEFT_PARENS: begin
-      TempNode := TParseNode.Create();
-      writestr(TempNode.Name, Lex.Lookahead.Name);
-      TempNode.DisplayText := Lex.Lookahead.Lexeme;
+      CreateNewNode;
+      ThisNode.Link(NewNode);
+      NewNode.DisplayText := Lex.Lookahead.Lexeme;
       Lex.Match(LEFT_PARENS);
-      Result.ParseNode.ChildrenList.Add(TempNode);
-      Result.ParseNode.ChildrenList.Add(expr().ParseNode);
-      TempNode := TParseNode.Create();
-      writestr(TempNode.Name, Lex.Lookahead.Name);
-      TempNode.DisplayText := Lex.Lookahead.Lexeme;
+      CreateNewNode;
+      ThisNode.Link(NewNode);
+      expr();
+      CreateNewNode;
+      ThisNode.Link(NewNode);
+      NewNode.DisplayText := Lex.Lookahead.Lexeme;
       Lex.Match(RIGHT_PARENS);
-      Result.ParseNode.ChildrenList.Add(TempNode);
     end;
     else
     begin
@@ -267,6 +307,11 @@ begin
   ChildrenList := TList.Create;
   DisplayText := '';
   Name := '';
+end;
+
+procedure TParseNode.Link(Node: TParseNode);
+begin
+  ChildrenList.add(Node);
 end;
 
 
