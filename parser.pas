@@ -16,6 +16,7 @@ type
     DisplayText: string;
     ChildrenList: TList;
     constructor Create();
+    destructor Destroy; override;
     procedure Link(Node: TParseNode);
   end;
 
@@ -38,8 +39,10 @@ type
 
   TParser = class
     NewNode: TParseNode;
+    { #done : add freeing objects }
 
     constructor Create;
+    destructor Destroy; override;
     procedure CreateNewNode;
     procedure CreateNewNodeAndLink(Node: TParseNode);
     procedure parse(FileNameToParse: string);
@@ -49,7 +52,8 @@ type
     procedure factor();
     procedure expr_rest();
     procedure term_rest();
-    procedure PrintParseTree(Root: TParseNode; space_count: word);
+    procedure PrintParseTree(Node: TParseNode; space_count: word);
+    procedure FreeParseTree(Node: TParseNode);
   end;
 
 
@@ -69,26 +73,45 @@ begin
   SyntaxNode := TSyntaxNode.Create;
 end;
 
-procedure TParser.PrintParseTree(Root: TParseNode; space_count: word);
+procedure TParser.PrintParseTree(Node: TParseNode; space_count: word);
 var
   ChildrenCount: integer = 0;
   i: integer = 0;
 begin
-  ChildrenCount := Root.ChildrenList.Count;
+  ChildrenCount := Node.ChildrenList.Count;
   for i := 1 to space_count do
   begin
     Write(' ');
   end;
-  writeln(Root.DisplayText);
+  writeln(Node.DisplayText);
   for i := 0 to (ChildrenCount - 1) do
   begin
-    PrintParseTree(TParseNode(Root.ChildrenList.Items[i]), space_count + 1);
+    PrintParseTree(TParseNode(Node.ChildrenList.Items[i]), space_count + 1);
   end;
+end;
+
+procedure TParser.FreeParseTree(Node: TParseNode);
+var
+  i: integer;
+  ChildrenCount: integer = 0;
+begin
+  ChildrenCount := Node.ChildrenList.Count;
+  for i := 0 to ChildrenCount - 1 do
+  begin
+    FreeParseTree(TParseNode(Node.ChildrenList.Items[i]));
+  end;
+  FreeAndNil(Node);
+
 end;
 
 constructor TParser.Create;
 begin
   NewNode := TParseNode.Create;
+end;
+
+destructor TParser.Destroy;
+begin
+  inherited Destroy;
 end;
 
 procedure TParser.CreateNewNode;
@@ -129,6 +152,8 @@ begin
   PrintParseTree(ParseRoot, 0);
   WriteLn();
   WriteLn('Parsing finished with OK result');
+  FreeParseTree(ParseRoot);
+  FreeAndNil(Lex);
 
 end;
 
@@ -291,6 +316,12 @@ begin
   ChildrenList := TList.Create;
   DisplayText := '';
   Name := '';
+end;
+
+destructor TParseNode.Destroy;
+begin
+  FreeAndNil(ChildrenList);
+  inherited Destroy;
 end;
 
 

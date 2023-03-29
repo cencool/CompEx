@@ -36,6 +36,7 @@ type
     Lookahead: TToken;
 
     constructor Create(const SrcFileName: string);
+    destructor Destroy; override;
     function ReadLine(): boolean;
     function PeekLine(src: TStringList): boolean;
     procedure ReadChar();
@@ -59,6 +60,13 @@ begin
   SrcLines.LoadFromFile(SrcFileName);
   CurrentLineNumber := 0;
   Lookahead := TToken.Create();
+end;
+
+destructor TLexer.Destroy;
+begin
+  FreeAndNil(SrcLines);
+  FreeAndNil(Lookahead);
+  inherited Destroy;
 end;
 
 function TLexer.ReadLine(): boolean;

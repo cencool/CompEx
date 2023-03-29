@@ -1,43 +1,78 @@
- 3  41 +;
- 2  3  4 +*;
+ 1  2 +;
+ 3  4 -;
+ 5  6 *;
+ 7  8 /;
+ 9  10 +;
 No more statements.
-Parsing finished with OK result
-statements
- expr
-  term
-   factor
-    3
-   term_rest
-  expr_rest
-   +
+
+ statements
+  expr
    term
     factor
-     41
+     1
     term_rest
    expr_rest
- ;
- expr
-  term
-   factor
-    2
-   term_rest
-    *
+    +
+    term
+     factor
+      2
+     term_rest
+    expr_rest
+  ;
+  expr
+   term
+    factor
+     3
+    term_rest
+   expr_rest
+    -
+    term
+     factor
+      4
+     term_rest
+    expr_rest
+  ;
+  expr
+   term
+    factor
+     5
+    term_rest
+     *
+     factor
+      6
+     term_rest
+   expr_rest
+  ;
+  expr
+   term
+    factor
+     7
+    term_rest
+     /
+     factor
+      8
+     term_rest
+   expr_rest
+  ;
+  expr
+   term
     factor
      (
      expr
       term
        factor
-        3
+        9
        term_rest
       expr_rest
        +
        term
         factor
-         4
+         10
         term_rest
        expr_rest
      )
     term_rest
-  expr_rest
- ;
+   expr_rest
+  ;
 
+Parsing finished with OK result
