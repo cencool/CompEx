@@ -39,6 +39,7 @@ type
 
   TParser = class
     NewNode: TParseNode;
+    ParseRoot: TParseNode;
     { #done : add freeing objects }
 
     constructor Create;
@@ -95,22 +96,27 @@ var
   i: integer;
   ChildrenCount: integer = 0;
 begin
-  ChildrenCount := Node.ChildrenList.Count;
-  for i := 0 to ChildrenCount - 1 do
+  if Node <> nil then
   begin
-    FreeParseTree(TParseNode(Node.ChildrenList.Items[i]));
+
+    ChildrenCount := Node.ChildrenList.Count;
+    for i := 0 to ChildrenCount - 1 do
+    begin
+      FreeParseTree(TParseNode(Node.ChildrenList.Items[i]));
+    end;
+    FreeAndNil(Node);
+
   end;
-  FreeAndNil(Node);
 
 end;
 
 constructor TParser.Create;
 begin
-  NewNode := TParseNode.Create;
 end;
 
 destructor TParser.Destroy;
 begin
+  FreeParseTree(ParseRoot);
   inherited Destroy;
 end;
 
@@ -127,32 +133,35 @@ end;
 
 procedure TParser.parse(FileNameToParse: string);
 
-var
-  ParseRoot: TParseNode;
-
 begin
-  Lex := TLexer.Create(FileNameToParse);
-  Lex.ReadLine();
-  ParseRoot := NewNode; { #todo : What display text for ParseRoot ? }
+  FreeParseTree(ParseRoot);
+  CreateNewNode;
+  ParseRoot := NewNode;
+  ParseRoot.DisplayText := 'Program';
   CreateNewNodeAndLink(ParseRoot);
 
+  Lex := TLexer.Create(FileNameToParse);
+  Lex.ReadLine();
+
+  { #done : how to re-initialize ParseRoot and New Node in case of Parse re-run ? }
   try
     Lex.Advance();
     statements();
   except
     on E: Exception do
     begin
-      PrintParseTree(ParseRoot, 0);
-      { #todo : how to print partial parse tree when error ? }
+      { #done : how to print partial parse tree when error ? }
+      { #done : how to free memory in case of exception ? }
       writeln();
       writeln(E.message);
+      PrintParseTree(ParseRoot, 0);
+      FreeAndNil(Lex);
       Exit;
     end;
   end;
   PrintParseTree(ParseRoot, 0);
   WriteLn();
   WriteLn('Parsing finished with OK result');
-  FreeParseTree(ParseRoot);
   FreeAndNil(Lex);
 
 end;
@@ -314,8 +323,6 @@ end;
 constructor TParseNode.Create;
 begin
   ChildrenList := TList.Create;
-  DisplayText := '';
-  Name := '';
 end;
 
 destructor TParseNode.Destroy;

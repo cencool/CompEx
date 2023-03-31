@@ -1,0 +1,7 @@
+/home/milhar/Documents/prog/compilers/dragon/compiler 
+Heap dump by heaptrc unit of /home/milhar/Documents/prog/compilers/dragon/compiler
+175 memory blocks allocated : 7665/7936
+175 memory blocks freed     : 7665/7936
+0 unfreed memory blocks : 0
+True heap size : 131072
+True free heap : 131072

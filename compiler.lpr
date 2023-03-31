@@ -23,6 +23,7 @@ begin
   SetHeapTraceOutput('heap.trc');
   MyParser := TParser.Create;
   MyParser.parse(filename);
+
   FreeAndNil(MyParser);
 
 end.
