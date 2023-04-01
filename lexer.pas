@@ -5,19 +5,22 @@ unit Lexer;
 interface
 
 uses
-  Classes;
+  Classes, Contnrs;
 
 type
   TTokenName = (NONE, NUMBER, IDENTIFIER, PLUS, MINUS, MULTIPLY, DIVIDE, LEFT_PARENS,
-    RIGHT_PARENS, SEMICOLON, FILE_END, UNKNOWN, CURLY_LEFT, CURLY_RIGHT);
+    RIGHT_PARENS, SEMICOLON, FILE_END, UNKNOWN, CURLY_LEFT, CURLY_RIGHT, TYPENAME);
 
   { TToken }
 
   TToken = class
     Name: TTokenName;
     Lexeme: string;
+    Value: extended;
     constructor Create();
   end;
+
+
 
 
   { TLexer }
@@ -34,6 +37,7 @@ type
     CurrentChar: string;
     PeekedChar: string;
     Lookahead: TToken;
+    Words: TFPObjectHashTable;
 
     constructor Create(const SrcFileName: string);
     destructor Destroy; override;
@@ -44,6 +48,7 @@ type
     procedure Advance();
     procedure Match(checked_token: TTokenName);
     procedure IsNumber(negative: boolean);
+    function CreateWordsTable: TFPObjectHashTable;
 
   end;
 
@@ -58,8 +63,8 @@ constructor TLexer.Create(const SrcFileName: string);
 begin
   SrcLines := TStringList.Create;
   SrcLines.LoadFromFile(SrcFileName);
-  CurrentLineNumber := 0;
   Lookahead := TToken.Create();
+  Words := CreateWordsTable;
 end;
 
 destructor TLexer.Destroy;
@@ -122,6 +127,7 @@ begin
   end;
 end;
 
+{ #todo : isn't better to get peek character every time readchar is done ? }
 procedure TLexer.PeekChar();
 begin
   if CharPosition < CurrentLineLength then
@@ -232,6 +238,7 @@ begin
     if not (IsLetter(UTF8Decode(PeekedChar), 1)) then
     begin
       Lookahead.Name := NUMBER;
+      Lookahead.Value := StrToFloat(Lookahead.Lexeme);
       Exit();
     end;
 
@@ -247,7 +254,10 @@ begin
       Lookahead.Lexeme := Lookahead.Lexeme + CurrentChar;
       PeekChar();
     end;
-    Lookahead.Name := IDENTIFIER;
+    if Words.Items[Lookahead.Lexeme] <> nil then
+      Lookahead.Name := TToken(Words.Items[Lookahead.Lexeme]).Name
+    else
+      Lookahead.Name := IDENTIFIER;
     Exit();
   end;
   Lookahead.Name := UNKNOWN;
@@ -307,12 +317,30 @@ begin
   end;
 end;
 
+function TLexer.CreateWordsTable: TFPObjectHashTable;
+type
+  TWordList = array [0..2] of string;
+var
+  WordList: TWordList = ('int', 'char', 'bool');
+  s: string;
+  t: TToken;
+begin
+  Result := TFPObjectHashTable.Create();
+  for s in WordList do
+  begin
+    t := TToken.Create();
+    t.Lexeme := s;
+    t.Name := TYPENAME;
+    Result.Add(s, t);
+  end;
+
+end;
+
 { TToken }
 
 constructor TToken.Create;
 begin
   Name := NONE;
-  Lexeme := '';
 end;
 
 end.

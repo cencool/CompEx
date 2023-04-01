@@ -16,14 +16,17 @@ const
 var
 
   MyParser: TParser;
+  sList : TStringList;
 
 begin
   if FileExists('heap.trc') then
     DeleteFile('heap.trc');
   SetHeapTraceOutput('heap.trc');
+
   MyParser := TParser.Create;
   MyParser.parse(filename);
-
   FreeAndNil(MyParser);
+
+
 
 end.

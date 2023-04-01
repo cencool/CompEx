@@ -1,7 +1,93 @@
 /home/milhar/Documents/prog/compilers/dragon/compiler 
 Heap dump by heaptrc unit of /home/milhar/Documents/prog/compilers/dragon/compiler
-363 memory blocks allocated : 13241/13768
-363 memory blocks freed     : 13241/13768
-0 unfreed memory blocks : 0
-True heap size : 131072
-True free heap : 131072
+622 memory blocks allocated : 8776320/8777656
+603 memory blocks freed     : 7024800/7026136
+19 unfreed memory blocks : 1751520
+True heap size : 2949120
+True free heap : 1193312
+Should be : 1193952
+Call trace for block $00007FDF34A42E00 size 32
+  $00000000004AB585  CREATE,  line 67 of lexer.pas
+  $000000000048F47B  PARSE,  line 153 of parser.pas
+  $000000000040136D  main,  line 27 of compiler.lpr
+Call trace for block $00007FDF34A42D00 size 24
+  $00000000004AB585  CREATE,  line 67 of lexer.pas
+  $000000000048F47B  PARSE,  line 153 of parser.pas
+  $000000000040136D  main,  line 27 of compiler.lpr
+Call trace for block $00007FDF34A42C00 size 24
+  $0000000000485890
+  $00000000004AB585  CREATE,  line 67 of lexer.pas
+  $000000000048F47B  PARSE,  line 153 of parser.pas
+  $000000000040136D  main,  line 27 of compiler.lpr
+Call trace for block $00007FDF34A42B00 size 24
+  $0000000000485890
+  $00000000004AB585  CREATE,  line 67 of lexer.pas
+  $000000000048F47B  PARSE,  line 153 of parser.pas
+  $000000000040136D  main,  line 27 of compiler.lpr
+Call trace for block $00007FDF34A42A00 size 48
+  $00000000004AC715  CREATEWORDSTABLE,  line 331 of lexer.pas
+  $00000000004AB585  CREATE,  line 67 of lexer.pas
+  $000000000048F47B  PARSE,  line 153 of parser.pas
+  $000000000040136D  main,  line 27 of compiler.lpr
+Call trace for block $00007FDF34A42900 size 32
+  $00000000004AB585  CREATE,  line 67 of lexer.pas
+  $000000000048F47B  PARSE,  line 153 of parser.pas
+  $000000000040136D  main,  line 27 of compiler.lpr
+Call trace for block $00007FDF34A42800 size 24
+  $00000000004AB585  CREATE,  line 67 of lexer.pas
+  $000000000048F47B  PARSE,  line 153 of parser.pas
+  $000000000040136D  main,  line 27 of compiler.lpr
+Call trace for block $00007FDF34A42700 size 24
+  $0000000000485890
+  $00000000004AB585  CREATE,  line 67 of lexer.pas
+  $000000000048F47B  PARSE,  line 153 of parser.pas
+  $000000000040136D  main,  line 27 of compiler.lpr
+Call trace for block $00007FDF34A42600 size 24
+  $0000000000485890
+  $00000000004AB585  CREATE,  line 67 of lexer.pas
+  $000000000048F47B  PARSE,  line 153 of parser.pas
+  $000000000040136D  main,  line 27 of compiler.lpr
+Call trace for block $00007FDF34A42500 size 48
+  $00000000004AC715  CREATEWORDSTABLE,  line 331 of lexer.pas
+  $00000000004AB585  CREATE,  line 67 of lexer.pas
+  $000000000048F47B  PARSE,  line 153 of parser.pas
+  $000000000040136D  main,  line 27 of compiler.lpr
+Call trace for block $00007FDF34A42400 size 32
+  $00000000004AB585  CREATE,  line 67 of lexer.pas
+  $000000000048F47B  PARSE,  line 153 of parser.pas
+  $000000000040136D  main,  line 27 of compiler.lpr
+Call trace for block $00007FDF34A42300 size 24
+  $00000000004AB585  CREATE,  line 67 of lexer.pas
+  $000000000048F47B  PARSE,  line 153 of parser.pas
+  $000000000040136D  main,  line 27 of compiler.lpr
+Call trace for block $00007FDF34A42200 size 24
+  $0000000000485890
+  $00000000004AB585  CREATE,  line 67 of lexer.pas
+  $000000000048F47B  PARSE,  line 153 of parser.pas
+  $000000000040136D  main,  line 27 of compiler.lpr
+Call trace for block $00007FDF34A42100 size 24
+  $0000000000485890
+  $00000000004AB585  CREATE,  line 67 of lexer.pas
+  $000000000048F47B  PARSE,  line 153 of parser.pas
+  $000000000040136D  main,  line 27 of compiler.lpr
+Call trace for block $00007FDF34A42000 size 48
+  $00000000004AC715  CREATEWORDSTABLE,  line 331 of lexer.pas
+  $00000000004AB585  CREATE,  line 67 of lexer.pas
+  $000000000048F47B  PARSE,  line 153 of parser.pas
+  $000000000040136D  main,  line 27 of compiler.lpr
+Call trace for block $00007FDF2FE78110 size 1750968
+  $00000000004AB585  CREATE,  line 67 of lexer.pas
+  $000000000048F47B  PARSE,  line 153 of parser.pas
+  $000000000040136D  main,  line 27 of compiler.lpr
+Call trace for block $00007FDF34A41F00 size 24
+  $00000000004AB585  CREATE,  line 67 of lexer.pas
+  $000000000048F47B  PARSE,  line 153 of parser.pas
+  $000000000040136D  main,  line 27 of compiler.lpr
+Call trace for block $00007FDF34A41E00 size 24
+  $00000000004AB585  CREATE,  line 67 of lexer.pas
+  $000000000048F47B  PARSE,  line 153 of parser.pas
+  $000000000040136D  main,  line 27 of compiler.lpr
+Call trace for block $00007FDF34A41D00 size 48
+  $00000000004AB585  CREATE,  line 67 of lexer.pas
+  $000000000048F47B  PARSE,  line 153 of parser.pas
+  $000000000040136D  main,  line 27 of compiler.lpr

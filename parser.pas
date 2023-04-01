@@ -57,6 +57,8 @@ type
     procedure parse(FileNameToParse: string);
     procedure prg();
     procedure block();
+    procedure decls();
+    procedure decl();
     procedure statements();
     procedure expr();
     procedure term();
@@ -201,6 +203,8 @@ begin
       NewNode.DisplayText := '{';
       //writeln('Block start');
       CreateNewNodeAndLink(ThisNode);
+      decls();
+      CreateNewNodeAndLink(ThisNode);
       statements();
       Lex.Match(CURLY_RIGHT);
       CreateNewNodeAndLink(ThisNode);
@@ -209,11 +213,39 @@ begin
     end;
     else
     begin
+      { #todo : correct char position report in case of syntax error }
       raise Exception.Create('Syntax error in : ' +
         IntToStr(Lex.CurrentLineNumber) + ',' + IntToStr(Lex.CharPosition) +
         LineEnding + 'Curly Brackets expected' + LineEnding + Lex.CurrentLine);
     end;
   end;
+
+end;
+
+procedure TParser.decls;
+var
+  ThisNode: TParseNode;
+begin
+  ThisNode := NewNode;
+  ThisNode.DisplayText := 'decls';
+  while Lex.Lookahead.Name = TYPENAME do
+  begin
+    CreateNewNodeAndLink(ThisNode);
+    decl();
+  end;
+end;
+
+procedure TParser.decl;
+var
+  ThisNode: TParseNode;
+begin
+  ThisNode := NewNode;
+  ThisNode.DisplayText := Lex.Lookahead.Lexeme;
+  Lex.Match(TYPENAME);
+  ThisNode.DisplayText := ThisNode.DisplayText + ' ' + Lex.Lookahead.Lexeme;
+  Lex.Match(IDENTIFIER);
+  ThisNode.DisplayText := ThisNode.DisplayText + ' ' + Lex.Lookahead.Lexeme;
+  Lex.Match(SEMICOLON);
 
 end;
 
@@ -350,7 +382,7 @@ begin
     NUMBER: begin
       CreateNewNodeAndLink(ThisNode);
       NewNode.DisplayText := Lex.Lookahead.Lexeme;
-      Write(' ' + Lex.Lookahead.lexeme + ' ');
+      Write(' ' + Lex.Lookahead.Lexeme + ' ');
       Lex.Match(NUMBER);
     end;
     IDENTIFIER: begin
