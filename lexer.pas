@@ -9,7 +9,7 @@ uses
 
 type
   TTokenName = (NONE, NUMBER, IDENTIFIER, PLUS, MINUS, MULTIPLY, DIVIDE, LEFT_PARENS,
-    RIGHT_PARENS, SEMICOLON, LINE_END, UNKNOWN);
+    RIGHT_PARENS, SEMICOLON, FILE_END, UNKNOWN, CURLY_LEFT, CURLY_RIGHT);
 
   { TToken }
 
@@ -187,10 +187,19 @@ begin
 
       Exit();
     end;
-    '': begin
-      Lookahead.Name := LINE_END;
+    '{': begin
+      Lookahead.Name := CURLY_LEFT;
       Lookahead.Lexeme := CurrentChar;
-
+      Exit;
+    end;
+    '}': begin
+      Lookahead.Name := CURLY_RIGHT;
+      Lookahead.Lexeme := CurrentChar;
+      Exit;
+    end;
+    '': begin
+      Lookahead.Name := NONE;
+      Lookahead.Lexeme := CurrentChar;
       Exit();
     end;
   end;

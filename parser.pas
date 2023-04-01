@@ -1,3 +1,11 @@
+(*
+Grammar:
+program ->   block
+block ->   '{' statements '}'
+statements -> expr;statements |  @
+*)
+
+
 unit Parser;
 
 {$mode ObjFPC}{$H+}
@@ -47,6 +55,8 @@ type
     procedure CreateNewNode;
     procedure CreateNewNodeAndLink(Node: TParseNode);
     procedure parse(FileNameToParse: string);
+    procedure prg();
+    procedure block();
     procedure statements();
     procedure expr();
     procedure term();
@@ -136,9 +146,7 @@ procedure TParser.parse(FileNameToParse: string);
 begin
   FreeParseTree(ParseRoot);
   CreateNewNode;
-  ParseRoot := NewNode;
-  ParseRoot.DisplayText := 'Program';
-  CreateNewNodeAndLink(ParseRoot);
+
 
   Lex := TLexer.Create(FileNameToParse);
   Lex.ReadLine();
@@ -146,7 +154,8 @@ begin
   { #done : how to re-initialize ParseRoot and New Node in case of Parse re-run ? }
   try
     Lex.Advance();
-    statements();
+    //statements();
+    prg();
   except
     on E: Exception do
     begin
@@ -166,7 +175,50 @@ begin
 
 end;
 
+procedure TParser.prg;
+begin
+  ParseRoot := NewNode;
+  ParseRoot.DisplayText := 'Program';
+  while Lex.Lookahead.Name <> NONE do
+  begin
+    CreateNewNodeAndLink(ParseRoot);
+    block();
+    //writeln('Return from block to prg');
+  end;
+end;
+
+procedure TParser.block;
+var
+  ThisNode: TParseNode;
+begin
+  ThisNode := NewNode;
+  ThisNode.DisplayText := 'block';
+
+  case Lex.Lookahead.Name of
+    CURLY_LEFT: begin
+      Lex.Match(CURLY_LEFT);
+      CreateNewNodeAndLink(ThisNode);
+      NewNode.DisplayText := '{';
+      //writeln('Block start');
+      CreateNewNodeAndLink(ThisNode);
+      statements();
+      Lex.Match(CURLY_RIGHT);
+      CreateNewNodeAndLink(ThisNode);
+      NewNode.DisplayText := '}';
+      //writeln('Block end');
+    end;
+    else
+    begin
+      raise Exception.Create('Syntax error in : ' +
+        IntToStr(Lex.CurrentLineNumber) + ',' + IntToStr(Lex.CharPosition) +
+        LineEnding + 'Curly Brackets expected' + LineEnding + Lex.CurrentLine);
+    end;
+  end;
+
+end;
+
 procedure TParser.statements();
+{ #todo : add distinction statement vs expression }
 var
   ThisNode: TParseNode;
 
@@ -174,17 +226,26 @@ begin
   ThisNode := NewNode;
   ThisNode.DisplayText := 'statements';
 
-  while Lex.Lookahead.Name <> LINE_END do
+  while (Lex.Lookahead.Name <> CURLY_RIGHT) do
   begin
-    CreateNewNodeAndLink(ThisNode);
-    expr();
-    //Write(' = ' + FloatToStr(expr()));
-    CreateNewNodeAndLink(ThisNode);
-    NewNode.DisplayText := Lex.Lookahead.Lexeme;
-    Lex.Match(SEMICOLON);
-    Writeln(';');
+    case Lex.Lookahead.Name of
+      CURLY_LEFT: begin
+        CreateNewNodeAndLink(ThisNode);
+        block();
+      end;
+      else
+      begin
+        CreateNewNodeAndLink(ThisNode);
+        expr();
+        CreateNewNodeAndLink(ThisNode);
+        NewNode.DisplayText := Lex.Lookahead.Lexeme;
+        Lex.Match(SEMICOLON);
+        Writeln(';');
+      end;
+    end;
+    //writeln('Statements processed');
+
   end;
-  writeln('No more statements.');
 
 end;
 
@@ -307,7 +368,7 @@ begin
       CreateNewNodeAndLink(ThisNode);
       NewNode.DisplayText := Lex.Lookahead.Lexeme;
       Lex.Match(RIGHT_PARENS);
-    end;
+    end
     else
     begin
       raise Exception.Create('Syntax error in : ' +
