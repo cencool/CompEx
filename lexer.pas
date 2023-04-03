@@ -8,13 +8,13 @@ uses
   Classes, Contnrs;
 
 type
-  TTokenName = (NONE, NUMBER, IDENTIFIER, PLUS, MINUS, MULTIPLY, DIVIDE, LEFT_PARENS,
+  TTokenTag = (NONE, NUMBER, IDENTIFIER, PLUS, MINUS, MULTIPLY, DIVIDE, LEFT_PARENS,
     RIGHT_PARENS, SEMICOLON, FILE_END, UNKNOWN, CURLY_LEFT, CURLY_RIGHT, TYPENAME);
 
   { TToken }
 
   TToken = class
-    Name: TTokenName;
+    Tag: TTokenTag;
     Lexeme: string;
     Value: extended;
     constructor Create();
@@ -46,7 +46,7 @@ type
     procedure ReadChar();
     procedure PeekChar();
     procedure Advance();
-    procedure Match(checked_token: TTokenName);
+    procedure Match(checked_token: TTokenTag);
     procedure IsNumber(negative: boolean);
     function CreateWordsTable: TFPObjectHashTable;
 
@@ -124,6 +124,7 @@ begin
   else
   begin
     CurrentChar := '';
+    CharPosition:=0;
   end;
 end;
 
@@ -142,6 +143,7 @@ begin
   else
   begin
     PeekedChar := '';
+    CharPosition:=0;
   end;
 
 end;
@@ -154,57 +156,57 @@ begin
     ReadChar();
   case CurrentChar of
     '+': begin
-      Lookahead.Name := PLUS;
+      Lookahead.Tag := PLUS;
       Lookahead.Lexeme := CurrentChar;
       Exit();
     end;
     '-': begin
-      Lookahead.Name := MINUS;
+      Lookahead.Tag := MINUS;
       Lookahead.Lexeme := CurrentChar;
       Exit();
     end;
     '*': begin
-      Lookahead.Name := MULTIPLY;
+      Lookahead.Tag := MULTIPLY;
       Lookahead.Lexeme := CurrentChar;
 
       Exit();
     end;
     '/': begin
-      Lookahead.Name := DIVIDE;
+      Lookahead.Tag := DIVIDE;
       Lookahead.Lexeme := CurrentChar;
 
       Exit();
     end;
     '(': begin
-      Lookahead.Name := LEFT_PARENS;
+      Lookahead.Tag := LEFT_PARENS;
       Lookahead.Lexeme := CurrentChar;
 
       Exit();
     end;
     ')': begin
-      Lookahead.Name := RIGHT_PARENS;
+      Lookahead.Tag := RIGHT_PARENS;
       Lookahead.Lexeme := CurrentChar;
 
       Exit();
     end;
     ';': begin
-      Lookahead.Name := SEMICOLON;
+      Lookahead.Tag := SEMICOLON;
       Lookahead.Lexeme := CurrentChar;
 
       Exit();
     end;
     '{': begin
-      Lookahead.Name := CURLY_LEFT;
+      Lookahead.Tag := CURLY_LEFT;
       Lookahead.Lexeme := CurrentChar;
       Exit;
     end;
     '}': begin
-      Lookahead.Name := CURLY_RIGHT;
+      Lookahead.Tag := CURLY_RIGHT;
       Lookahead.Lexeme := CurrentChar;
       Exit;
     end;
     '': begin
-      Lookahead.Name := NONE;
+      Lookahead.Tag := NONE;
       Lookahead.Lexeme := CurrentChar;
       Exit();
     end;
@@ -237,7 +239,7 @@ begin
     end;
     if not (IsLetter(UTF8Decode(PeekedChar), 1)) then
     begin
-      Lookahead.Name := NUMBER;
+      Lookahead.Tag := NUMBER;
       Lookahead.Value := StrToFloat(Lookahead.Lexeme);
       Exit();
     end;
@@ -255,21 +257,21 @@ begin
       PeekChar();
     end;
     if Words.Items[Lookahead.Lexeme] <> nil then
-      Lookahead.Name := TToken(Words.Items[Lookahead.Lexeme]).Name
+      Lookahead.Tag := TToken(Words.Items[Lookahead.Lexeme]).Tag
     else
-      Lookahead.Name := IDENTIFIER;
+      Lookahead.Tag := IDENTIFIER;
     Exit();
   end;
-  Lookahead.Name := UNKNOWN;
+  Lookahead.Tag := UNKNOWN;
   Lookahead.Lexeme := CurrentChar;
   Exit();
 end;
 
-procedure TLexer.Match(checked_token: TTokenName);
+procedure TLexer.Match(checked_token: TTokenTag);
 var
   token_name: string;
 begin
-  if checked_token = Lookahead.Name then
+  if checked_token = Lookahead.Tag then
   begin
 
     Advance();
@@ -312,7 +314,7 @@ begin
         PeekChar();
       end;
     end;
-    Lookahead.Name := NUMBER;
+    Lookahead.Tag := NUMBER;
     Exit();
   end;
 end;
@@ -330,7 +332,7 @@ begin
   begin
     t := TToken.Create();
     t.Lexeme := s;
-    t.Name := TYPENAME;
+    t.Tag := TYPENAME;
     Result.Add(s, t);
   end;
 
@@ -340,7 +342,7 @@ end;
 
 constructor TToken.Create;
 begin
-  Name := NONE;
+  Tag := NONE;
 end;
 
 end.

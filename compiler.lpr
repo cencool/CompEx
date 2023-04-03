@@ -13,10 +13,11 @@ uses {$IFDEF UNIX}
 
 const
   filename = 'in.txt';
+
+
 var
 
   MyParser: TParser;
-  sList : TStringList;
 
 begin
   if FileExists('heap.trc') then
