@@ -496,7 +496,7 @@ begin
       Nodes := expr();
       ParseNode.Link(Nodes.ParseNode);
       FreeAndNil(Nodes);
-      NewNode.DisplayText := Lex.Lookahead.Lexeme;
+      //NewNode.DisplayText := Lex.Lookahead.Lexeme;
       ParseNode.AddChildWithText(Lex.Lookahead.Lexeme);
       Lex.Match(RIGHT_PARENS);
     end

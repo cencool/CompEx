@@ -1,850 +1,643 @@
 /home/milhar/Documents/prog/compilers/dragon/compiler 
 Heap dump by heaptrc unit of /home/milhar/Documents/prog/compilers/dragon/compiler
-426 memory blocks allocated : 8770377/8770944
-325 memory blocks freed     : 7016241/7016808
-101 unfreed memory blocks : 1754136
-True heap size : 3014656
-True free heap : 1237856
-Should be : 1241128
-Call trace for block $00007F5907F25E00 size 24
+304 memory blocks allocated : 8766382/8766720
+230 memory blocks freed     : 7013110/7013448
+74 unfreed memory blocks : 1753272
+True heap size : 2981888
+True free heap : 1212000
+Should be : 1214408
+Call trace for block $00007F004D4B7300 size 24
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490380  EXPR_REST,  line 406 of parser.pas
-  $0000000000490260  EXPR,  line 374 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490380  EXPR_REST,  line 405 of parser.pas
+  $0000000000490260  EXPR,  line 373 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F25D00 size 32
+Call trace for block $00007F004D4B7200 size 32
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490380  EXPR_REST,  line 406 of parser.pas
-  $0000000000490260  EXPR,  line 374 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490380  EXPR_REST,  line 405 of parser.pas
+  $0000000000490260  EXPR,  line 373 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F25C00 size 40
+Call trace for block $00007F004D4B7100 size 40
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490380  EXPR_REST,  line 406 of parser.pas
-  $0000000000490260  EXPR,  line 374 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490380  EXPR_REST,  line 405 of parser.pas
+  $0000000000490260  EXPR,  line 373 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F25800 size 24
+Call trace for block $00007F004D4B6E00 size 24
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490550  TERM_REST,  line 443 of parser.pas
-  $0000000000490310  TERM,  line 394 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490550  TERM_REST,  line 442 of parser.pas
+  $00000000004905E7  TERM_REST,  line 452 of parser.pas
+  $0000000000490310  TERM,  line 393 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F25700 size 32
+Call trace for block $00007F004D4B6D00 size 32
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490550  TERM_REST,  line 443 of parser.pas
-  $0000000000490310  TERM,  line 394 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490550  TERM_REST,  line 442 of parser.pas
+  $00000000004905E7  TERM_REST,  line 452 of parser.pas
+  $0000000000490310  TERM,  line 393 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F25600 size 40
+Call trace for block $00007F004D4B6C00 size 40
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490550  TERM_REST,  line 443 of parser.pas
-  $0000000000490310  TERM,  line 394 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490550  TERM_REST,  line 442 of parser.pas
+  $00000000004905E7  TERM_REST,  line 452 of parser.pas
+  $0000000000490310  TERM,  line 393 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F34C00 size 24
+Call trace for block $00007F004D4B6300 size 24
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490773  FACTOR,  line 480 of parser.pas
-  $00000000004902ED  TERM,  line 390 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490773  FACTOR,  line 479 of parser.pas
+  $00000000004905C4  TERM_REST,  line 449 of parser.pas
+  $0000000000490310  TERM,  line 393 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F34B00 size 32
+Call trace for block $00007F004D4B6200 size 32
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490773  FACTOR,  line 480 of parser.pas
-  $00000000004902ED  TERM,  line 390 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490773  FACTOR,  line 479 of parser.pas
+  $00000000004905C4  TERM_REST,  line 449 of parser.pas
+  $0000000000490310  TERM,  line 393 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F34A00 size 40
+Call trace for block $00007F004D4B6100 size 40
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490773  FACTOR,  line 480 of parser.pas
-  $00000000004902ED  TERM,  line 390 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490773  FACTOR,  line 479 of parser.pas
+  $00000000004905C4  TERM_REST,  line 449 of parser.pas
+  $0000000000490310  TERM,  line 393 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F34500 size 24
+Call trace for block $00007F004D4B5700 size 24
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $00000000004902CC  TERM,  line 387 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490550  TERM_REST,  line 442 of parser.pas
+  $0000000000490310  TERM,  line 393 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F34400 size 32
+Call trace for block $00007F004D4B5600 size 32
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $00000000004902CC  TERM,  line 387 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490550  TERM_REST,  line 442 of parser.pas
+  $0000000000490310  TERM,  line 393 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F34300 size 40
+Call trace for block $00007F004D4B5500 size 40
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $00000000004902CC  TERM,  line 387 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490550  TERM_REST,  line 442 of parser.pas
+  $0000000000490310  TERM,  line 393 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F33E00 size 24
+Call trace for block $00007F004D4B4E00 size 24
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $000000000049021C  EXPR,  line 367 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490380  EXPR_REST,  line 405 of parser.pas
+  $0000000000490260  EXPR,  line 373 of parser.pas
+  $0000000000490958  FACTOR,  line 496 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F33D00 size 32
+Call trace for block $00007F004D4B4D00 size 32
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $000000000049021C  EXPR,  line 367 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490380  EXPR_REST,  line 405 of parser.pas
+  $0000000000490260  EXPR,  line 373 of parser.pas
+  $0000000000490958  FACTOR,  line 496 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F33C00 size 40
+Call trace for block $00007F004D4B4C00 size 40
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $000000000049021C  EXPR,  line 367 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490380  EXPR_REST,  line 405 of parser.pas
+  $0000000000490260  EXPR,  line 373 of parser.pas
+  $0000000000490958  FACTOR,  line 496 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F33200 size 24
+Call trace for block $00007F004D4B4900 size 24
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490380  EXPR_REST,  line 406 of parser.pas
-  $0000000000490260  EXPR,  line 374 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490550  TERM_REST,  line 442 of parser.pas
+  $0000000000490684  TERM_REST,  line 463 of parser.pas
+  $0000000000490310  TERM,  line 393 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490958  FACTOR,  line 496 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F33100 size 32
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490380  EXPR_REST,  line 406 of parser.pas
-  $0000000000490260  EXPR,  line 374 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F33000 size 40
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490380  EXPR_REST,  line 406 of parser.pas
-  $0000000000490260  EXPR,  line 374 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F32C00 size 24
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490550  TERM_REST,  line 443 of parser.pas
-  $0000000000490310  TERM,  line 394 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F32B00 size 32
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490550  TERM_REST,  line 443 of parser.pas
-  $0000000000490310  TERM,  line 394 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F32A00 size 40
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490550  TERM_REST,  line 443 of parser.pas
-  $0000000000490310  TERM,  line 394 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F32000 size 24
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490773  FACTOR,  line 480 of parser.pas
-  $00000000004902ED  TERM,  line 390 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F31F00 size 32
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490773  FACTOR,  line 480 of parser.pas
-  $00000000004902ED  TERM,  line 390 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F31E00 size 40
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490773  FACTOR,  line 480 of parser.pas
-  $00000000004902ED  TERM,  line 390 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F31900 size 24
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $00000000004902CC  TERM,  line 387 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F31800 size 32
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $00000000004902CC  TERM,  line 387 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F31700 size 40
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $00000000004902CC  TERM,  line 387 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F31200 size 24
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $000000000049021C  EXPR,  line 367 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F31100 size 32
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $000000000049021C  EXPR,  line 367 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F31000 size 40
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $000000000049021C  EXPR,  line 367 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F30B00 size 24
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $00000000004900E0  STATEMENTS,  line 330 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F30A00 size 32
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $00000000004900E0  STATEMENTS,  line 330 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F30900 size 40
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $00000000004900E0  STATEMENTS,  line 330 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F30100 size 24
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $000000000048FE75  DECL,  line 302 of parser.pas
-  $000000000048FDB1  DECLS,  line 289 of parser.pas
-  $000000000048FB2E  BLOCK,  line 253 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F30000 size 32
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $000000000048FE75  DECL,  line 302 of parser.pas
-  $000000000048FDB1  DECLS,  line 289 of parser.pas
-  $000000000048FB2E  BLOCK,  line 253 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F2FF00 size 40
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $000000000048FE75  DECL,  line 302 of parser.pas
-  $000000000048FDB1  DECLS,  line 289 of parser.pas
-  $000000000048FB2E  BLOCK,  line 253 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F2FA00 size 24
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $000000000048FD8C  DECLS,  line 284 of parser.pas
-  $000000000048FB2E  BLOCK,  line 253 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F2F900 size 32
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $000000000048FD8C  DECLS,  line 284 of parser.pas
-  $000000000048FB2E  BLOCK,  line 253 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F2F800 size 40
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $000000000048FD8C  DECLS,  line 284 of parser.pas
-  $000000000048FB2E  BLOCK,  line 253 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F2EE00 size 24
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $000000000048FACC  BLOCK,  line 242 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F2ED00 size 32
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $000000000048FACC  BLOCK,  line 242 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F2EC00 size 40
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $000000000048FACC  BLOCK,  line 242 of parser.pas
-  $0000000000490121  STATEMENTS,  line 337 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
-  $000000000048FA01  PRG,  line 228 of parser.pas
-  $000000000048F7FF  PARSE,  line 193 of parser.pas
-  $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F2E500 size 24
-  $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490380  EXPR_REST,  line 406 of parser.pas
-  $0000000000490417  EXPR_REST,  line 417 of parser.pas
-  $0000000000490260  EXPR,  line 374 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
-  $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F2E400 size 32
+Call trace for block $00007F004D4B4800 size 32
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490380  EXPR_REST,  line 406 of parser.pas
-  $0000000000490417  EXPR_REST,  line 417 of parser.pas
-  $0000000000490260  EXPR,  line 374 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490550  TERM_REST,  line 442 of parser.pas
+  $0000000000490684  TERM_REST,  line 463 of parser.pas
+  $0000000000490310  TERM,  line 393 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490958  FACTOR,  line 496 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F2E300 size 40
+Call trace for block $00007F004D4B4700 size 40
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490380  EXPR_REST,  line 406 of parser.pas
-  $0000000000490417  EXPR_REST,  line 417 of parser.pas
-  $0000000000490260  EXPR,  line 374 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490550  TERM_REST,  line 442 of parser.pas
+  $0000000000490684  TERM_REST,  line 463 of parser.pas
+  $0000000000490310  TERM,  line 393 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490958  FACTOR,  line 496 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F2E000 size 24
+Call trace for block $00007F004D4B3E00 size 24
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490550  TERM_REST,  line 443 of parser.pas
-  $0000000000490310  TERM,  line 394 of parser.pas
-  $00000000004903F4  EXPR_REST,  line 414 of parser.pas
-  $0000000000490260  EXPR,  line 374 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490773  FACTOR,  line 479 of parser.pas
+  $0000000000490661  TERM_REST,  line 460 of parser.pas
+  $0000000000490310  TERM,  line 393 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490958  FACTOR,  line 496 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F2DF00 size 32
+Call trace for block $00007F004D4B3D00 size 32
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490550  TERM_REST,  line 443 of parser.pas
-  $0000000000490310  TERM,  line 394 of parser.pas
-  $00000000004903F4  EXPR_REST,  line 414 of parser.pas
-  $0000000000490260  EXPR,  line 374 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490773  FACTOR,  line 479 of parser.pas
+  $0000000000490661  TERM_REST,  line 460 of parser.pas
+  $0000000000490310  TERM,  line 393 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490958  FACTOR,  line 496 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F2DE00 size 40
+Call trace for block $00007F004D4B3C00 size 40
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490550  TERM_REST,  line 443 of parser.pas
-  $0000000000490310  TERM,  line 394 of parser.pas
-  $00000000004903F4  EXPR_REST,  line 414 of parser.pas
-  $0000000000490260  EXPR,  line 374 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490773  FACTOR,  line 479 of parser.pas
+  $0000000000490661  TERM_REST,  line 460 of parser.pas
+  $0000000000490310  TERM,  line 393 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490958  FACTOR,  line 496 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F2D400 size 24
+Call trace for block $00007F004D4B3200 size 24
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490773  FACTOR,  line 480 of parser.pas
-  $00000000004902ED  TERM,  line 390 of parser.pas
-  $00000000004903F4  EXPR_REST,  line 414 of parser.pas
-  $0000000000490260  EXPR,  line 374 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490550  TERM_REST,  line 442 of parser.pas
+  $0000000000490310  TERM,  line 393 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490958  FACTOR,  line 496 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F2D300 size 32
+Call trace for block $00007F004D4B3100 size 32
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490773  FACTOR,  line 480 of parser.pas
-  $00000000004902ED  TERM,  line 390 of parser.pas
-  $00000000004903F4  EXPR_REST,  line 414 of parser.pas
-  $0000000000490260  EXPR,  line 374 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490550  TERM_REST,  line 442 of parser.pas
+  $0000000000490310  TERM,  line 393 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490958  FACTOR,  line 496 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907F2D200 size 40
+Call trace for block $00007F0051C52F00 size 40
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490773  FACTOR,  line 480 of parser.pas
-  $00000000004902ED  TERM,  line 390 of parser.pas
-  $00000000004903F4  EXPR_REST,  line 414 of parser.pas
-  $0000000000490260  EXPR,  line 374 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490550  TERM_REST,  line 442 of parser.pas
+  $0000000000490310  TERM,  line 393 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490958  FACTOR,  line 496 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D4C00 size 24
+Call trace for block $00007F0051C52600 size 24
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $00000000004902CC  TERM,  line 387 of parser.pas
-  $00000000004903F4  EXPR_REST,  line 414 of parser.pas
-  $0000000000490260  EXPR,  line 374 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490773  FACTOR,  line 479 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490958  FACTOR,  line 496 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D4B00 size 32
+Call trace for block $00007F0051C52500 size 32
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $00000000004902CC  TERM,  line 387 of parser.pas
-  $00000000004903F4  EXPR_REST,  line 414 of parser.pas
-  $0000000000490260  EXPR,  line 374 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490773  FACTOR,  line 479 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490958  FACTOR,  line 496 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D4A00 size 40
+Call trace for block $00007F0051C52400 size 40
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $00000000004902CC  TERM,  line 387 of parser.pas
-  $00000000004903F4  EXPR_REST,  line 414 of parser.pas
-  $0000000000490260  EXPR,  line 374 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490773  FACTOR,  line 479 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490958  FACTOR,  line 496 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D4000 size 24
+Call trace for block $00007F0051C51F00 size 24
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490380  EXPR_REST,  line 406 of parser.pas
-  $0000000000490260  EXPR,  line 374 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $00000000004902CC  TERM,  line 386 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490958  FACTOR,  line 496 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D3F00 size 32
+Call trace for block $00007F0051C51E00 size 32
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490380  EXPR_REST,  line 406 of parser.pas
-  $0000000000490260  EXPR,  line 374 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $00000000004902CC  TERM,  line 386 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490958  FACTOR,  line 496 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D3E00 size 40
+Call trace for block $00007F0051C51D00 size 40
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490380  EXPR_REST,  line 406 of parser.pas
-  $0000000000490260  EXPR,  line 374 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $00000000004902CC  TERM,  line 386 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490958  FACTOR,  line 496 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D3A00 size 24
+Call trace for block $00007F0051C51800 size 24
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490550  TERM_REST,  line 443 of parser.pas
-  $0000000000490310  TERM,  line 394 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $000000000049021C  EXPR,  line 366 of parser.pas
+  $0000000000490958  FACTOR,  line 496 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D3900 size 32
+Call trace for block $00007F0051C51700 size 32
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490550  TERM_REST,  line 443 of parser.pas
-  $0000000000490310  TERM,  line 394 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $000000000049021C  EXPR,  line 366 of parser.pas
+  $0000000000490958  FACTOR,  line 496 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D3800 size 40
+Call trace for block $00007F0051C51600 size 40
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490550  TERM_REST,  line 443 of parser.pas
-  $0000000000490310  TERM,  line 394 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $000000000049021C  EXPR,  line 366 of parser.pas
+  $0000000000490958  FACTOR,  line 496 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D2E00 size 24
+Call trace for block $00007F0051C50A00 size 24
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490773  FACTOR,  line 480 of parser.pas
-  $00000000004902ED  TERM,  line 390 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490773  FACTOR,  line 479 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D2D00 size 32
+Call trace for block $00007F0051C50900 size 32
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490773  FACTOR,  line 480 of parser.pas
-  $00000000004902ED  TERM,  line 390 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490773  FACTOR,  line 479 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D2C00 size 40
+Call trace for block $00007F0051C50800 size 40
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $0000000000490773  FACTOR,  line 480 of parser.pas
-  $00000000004902ED  TERM,  line 390 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $0000000000490773  FACTOR,  line 479 of parser.pas
+  $00000000004902ED  TERM,  line 389 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D2700 size 24
+Call trace for block $00007F0051C50300 size 24
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $00000000004902CC  TERM,  line 387 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $00000000004902CC  TERM,  line 386 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D2600 size 32
+Call trace for block $00007F0051C50200 size 32
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $00000000004902CC  TERM,  line 387 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $00000000004902CC  TERM,  line 386 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D2500 size 40
+Call trace for block $00007F0051C50100 size 40
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $00000000004902CC  TERM,  line 387 of parser.pas
-  $000000000049023D  EXPR,  line 370 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $00000000004902CC  TERM,  line 386 of parser.pas
+  $000000000049023D  EXPR,  line 369 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D2000 size 24
+Call trace for block $00007F0051C4FC00 size 24
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $000000000049021C  EXPR,  line 367 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $000000000049021C  EXPR,  line 366 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D1F00 size 32
+Call trace for block $00007F0051C4FB00 size 32
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $000000000049021C  EXPR,  line 367 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $000000000049021C  EXPR,  line 366 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D1E00 size 40
+Call trace for block $00007F0051C4FA00 size 40
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $000000000049021C  EXPR,  line 367 of parser.pas
-  $0000000000490146  STATEMENTS,  line 343 of parser.pas
+  $000000000049021C  EXPR,  line 366 of parser.pas
+  $0000000000490146  STATEMENTS,  line 342 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D1900 size 24
+Call trace for block $00007F0051C4F500 size 24
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $00000000004900E0  STATEMENTS,  line 330 of parser.pas
+  $00000000004900E0  STATEMENTS,  line 329 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D1800 size 32
+Call trace for block $00007F0051C4F400 size 32
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $00000000004900E0  STATEMENTS,  line 330 of parser.pas
+  $00000000004900E0  STATEMENTS,  line 329 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D1700 size 40
+Call trace for block $00007F0051C4F300 size 40
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
-  $00000000004900E0  STATEMENTS,  line 330 of parser.pas
+  $00000000004900E0  STATEMENTS,  line 329 of parser.pas
   $000000000048FB51  BLOCK,  line 258 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D1300 size 24
+Call trace for block $00007F0051C4EF00 size 24
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
   $000000000048FD8C  DECLS,  line 284 of parser.pas
   $000000000048FB2E  BLOCK,  line 253 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D1200 size 32
+Call trace for block $00007F0051C4EE00 size 32
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
   $000000000048FD8C  DECLS,  line 284 of parser.pas
   $000000000048FB2E  BLOCK,  line 253 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D1100 size 40
+Call trace for block $00007F0051C4ED00 size 40
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
   $000000000048FD8C  DECLS,  line 284 of parser.pas
   $000000000048FB2E  BLOCK,  line 253 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D0700 size 24
+Call trace for block $00007F0051C4E400 size 24
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
   $000000000048FACC  BLOCK,  line 242 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D0600 size 32
+Call trace for block $00007F0051C4E300 size 32
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
   $000000000048FACC  BLOCK,  line 242 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D0500 size 40
+Call trace for block $00007F0051C4E200 size 40
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
   $000000000048FACC  BLOCK,  line 242 of parser.pas
   $000000000048FA01  PRG,  line 228 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6D0000 size 24
+Call trace for block $00007F0051C4DD00 size 24
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
   $000000000048F9DC  PRG,  line 223 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6CFF00 size 32
+Call trace for block $00007F0051C4DC00 size 32
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
   $000000000048F9DC  PRG,  line 223 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6CFE00 size 40
+Call trace for block $00007F0051C4DB00 size 40
   $000000000048F2DE  CREATEASSIGN,  line 114 of parser.pas
   $000000000048F9DC  PRG,  line 223 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6CFA00 size 24
+Call trace for block $00007F0051C4D700 size 24
   $000000000048F9DC  PRG,  line 223 of parser.pas
   $000000000048F7FF  PARSE,  line 193 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6CF800 size 32
-  $00000000004ABD75  CREATE,  line 67 of lexer.pas
+Call trace for block $00007F0051C4D500 size 32
+  $00000000004ABD55  CREATE,  line 67 of lexer.pas
   $000000000048F7AD  PARSE,  line 187 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6CF700 size 24
-  $00000000004ABD75  CREATE,  line 67 of lexer.pas
+Call trace for block $00007F0051C4D400 size 24
+  $00000000004ABD55  CREATE,  line 67 of lexer.pas
   $000000000048F7AD  PARSE,  line 187 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6CF600 size 24
+Call trace for block $00007F0051C4D300 size 24
   $0000000000485890
-  $00000000004ABD75  CREATE,  line 67 of lexer.pas
+  $00000000004ABD55  CREATE,  line 67 of lexer.pas
   $000000000048F7AD  PARSE,  line 187 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6CF500 size 24
+Call trace for block $00007F0051C4D200 size 24
   $0000000000485890
-  $00000000004ABD75  CREATE,  line 67 of lexer.pas
+  $00000000004ABD55  CREATE,  line 67 of lexer.pas
   $000000000048F7AD  PARSE,  line 187 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6CF400 size 48
-  $00000000004ACF05  CREATEWORDSTABLE,  line 333 of lexer.pas
-  $00000000004ABD75  CREATE,  line 67 of lexer.pas
+Call trace for block $00007F0051C4D100 size 48
+  $00000000004ACEE5  CREATEWORDSTABLE,  line 333 of lexer.pas
+  $00000000004ABD55  CREATE,  line 67 of lexer.pas
   $000000000048F7AD  PARSE,  line 187 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6CF300 size 32
-  $00000000004ABD75  CREATE,  line 67 of lexer.pas
+Call trace for block $00007F0051C4D000 size 32
+  $00000000004ABD55  CREATE,  line 67 of lexer.pas
   $000000000048F7AD  PARSE,  line 187 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6CF200 size 24
-  $00000000004ABD75  CREATE,  line 67 of lexer.pas
+Call trace for block $00007F0051C4CF00 size 24
+  $00000000004ABD55  CREATE,  line 67 of lexer.pas
   $000000000048F7AD  PARSE,  line 187 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6CF100 size 24
+Call trace for block $00007F0051C4CE00 size 24
   $0000000000485890
-  $00000000004ABD75  CREATE,  line 67 of lexer.pas
+  $00000000004ABD55  CREATE,  line 67 of lexer.pas
   $000000000048F7AD  PARSE,  line 187 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6CF000 size 24
+Call trace for block $00007F0051C4CD00 size 24
   $0000000000485890
-  $00000000004ABD75  CREATE,  line 67 of lexer.pas
+  $00000000004ABD55  CREATE,  line 67 of lexer.pas
   $000000000048F7AD  PARSE,  line 187 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6CEF00 size 48
-  $00000000004ACF05  CREATEWORDSTABLE,  line 333 of lexer.pas
-  $00000000004ABD75  CREATE,  line 67 of lexer.pas
+Call trace for block $00007F0051C4CC00 size 48
+  $00000000004ACEE5  CREATEWORDSTABLE,  line 333 of lexer.pas
+  $00000000004ABD55  CREATE,  line 67 of lexer.pas
   $000000000048F7AD  PARSE,  line 187 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6CEE00 size 32
-  $00000000004ABD75  CREATE,  line 67 of lexer.pas
+Call trace for block $00007F0051C4CB00 size 32
+  $00000000004ABD55  CREATE,  line 67 of lexer.pas
   $000000000048F7AD  PARSE,  line 187 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6CED00 size 24
-  $00000000004ABD75  CREATE,  line 67 of lexer.pas
+Call trace for block $00007F0051C4CA00 size 24
+  $00000000004ABD55  CREATE,  line 67 of lexer.pas
   $000000000048F7AD  PARSE,  line 187 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6CEC00 size 24
+Call trace for block $00007F0051C4C900 size 24
   $0000000000485890
-  $00000000004ABD75  CREATE,  line 67 of lexer.pas
+  $00000000004ABD55  CREATE,  line 67 of lexer.pas
   $000000000048F7AD  PARSE,  line 187 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6CEB00 size 24
+Call trace for block $00007F0051C4C800 size 24
   $0000000000485890
-  $00000000004ABD75  CREATE,  line 67 of lexer.pas
+  $00000000004ABD55  CREATE,  line 67 of lexer.pas
   $000000000048F7AD  PARSE,  line 187 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6CEA00 size 48
-  $00000000004ACF05  CREATEWORDSTABLE,  line 333 of lexer.pas
-  $00000000004ABD75  CREATE,  line 67 of lexer.pas
+Call trace for block $00007F0051C4C700 size 48
+  $00000000004ACEE5  CREATEWORDSTABLE,  line 333 of lexer.pas
+  $00000000004ABD55  CREATE,  line 67 of lexer.pas
   $000000000048F7AD  PARSE,  line 187 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F5907B05110 size 1750968
-  $00000000004ABD75  CREATE,  line 67 of lexer.pas
+Call trace for block $00007F004D08B110 size 1750968
+  $00000000004ABD55  CREATE,  line 67 of lexer.pas
   $000000000048F7AD  PARSE,  line 187 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6CE900 size 24
-  $00000000004ABD75  CREATE,  line 67 of lexer.pas
+Call trace for block $00007F0051C4C600 size 24
+  $00000000004ABD55  CREATE,  line 67 of lexer.pas
   $000000000048F7AD  PARSE,  line 187 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6CE800 size 24
-  $00000000004ABD75  CREATE,  line 67 of lexer.pas
+Call trace for block $00007F0051C4C500 size 24
+  $00000000004ABD55  CREATE,  line 67 of lexer.pas
   $000000000048F7AD  PARSE,  line 187 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
-Call trace for block $00007F590C6CE700 size 48
-  $00000000004ABD75  CREATE,  line 67 of lexer.pas
+Call trace for block $00007F0051C4C400 size 48
+  $00000000004ABD55  CREATE,  line 67 of lexer.pas
   $000000000048F7AD  PARSE,  line 187 of parser.pas
   $000000000040136D  main,  line 28 of compiler.lpr
