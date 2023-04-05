@@ -71,6 +71,7 @@ destructor TLexer.Destroy;
 begin
   FreeAndNil(SrcLines);
   FreeAndNil(Lookahead);
+  FreeAndNil(Words);
   inherited Destroy;
 end;
 
@@ -260,6 +261,7 @@ begin
       Lookahead.Tag := TToken(Words.Items[Lookahead.Lexeme]).Tag
     else
       Lookahead.Tag := IDENTIFIER;
+    {todo: finalize token storage for identifiers }
     Exit();
   end;
   Lookahead.Tag := UNKNOWN;
@@ -337,6 +339,8 @@ begin
   end;
 
 end;
+
+
 
 { TToken }
 

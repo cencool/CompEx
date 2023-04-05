@@ -50,6 +50,8 @@ type
     SyntaxNode: TSyntaxNode;
     constructor Create;
     constructor CreateAssign(var ParseVar: TParseNode; var SyntaxVar: TSyntaxNode);
+    constructor CreateAssignParse(var ParseVar:TParseNode);
+    destructor Destroy; override;
   end;
 
   { TParser }
@@ -114,6 +116,19 @@ begin
   SyntaxNode := TSyntaxNode.Create();
   ParseVar := ParseNode;
   SyntaxVar := SyntaxNode;
+end;
+
+constructor TNodes.CreateAssignParse(var ParseVar: TParseNode);
+begin
+  ParseNode := TParseNode.Create();
+  ParseVar := ParseNode;
+end;
+
+destructor TNodes.Destroy;
+begin
+  //FreeAndNil(ParseNode);
+  //FreeAndNil(SyntaxNode);
+  inherited Destroy;
 end;
 
 procedure TParser.PrintParseTree(Node: TParseNode; space_count: word);
@@ -192,6 +207,7 @@ begin
     Lex.Advance();
     Nodes := prg();
     ParseRoot := Nodes.ParseNode;
+    FreeAndNil(Nodes);
   except
     on E: Exception do
     begin
@@ -217,10 +233,9 @@ end;
 function TParser.prg(): TNodes;
 var
   ParseNode: TParseNode = nil;
-  SyntaxNode: TSyntaxNode = nil;
   Nodes: TNodes;
 begin
-  Result := TNodes.CreateAssign(ParseNode, SyntaxNode);
+  Result := TNodes.CreateAssignParse(ParseNode);
   ParseNode.DisplayText := 'Program';
 
   while Lex.Lookahead.Tag <> NONE do
@@ -235,11 +250,10 @@ end;
 function TParser.block: TNodes;
 var
   ParseNode: TParseNode = nil;
-  SyntaxNode: TSyntaxNode = nil;
   Nodes: TNodes;
 
 begin
-  Result := TNodes.CreateAssign(ParseNode, SyntaxNode);
+  Result := TNodes.CreateAssignParse(ParseNode);
   ParseNode.DisplayText := 'block';
 
 
@@ -277,11 +291,10 @@ end;
 function TParser.decls: TNodes;
 var
   ParseNode: TParseNode = nil;
-  SyntaxNode: TSyntaxNode = nil;
   Nodes: TNodes;
 
 begin
-  Result := TNodes.CreateAssign(ParseNode, SyntaxNode);
+  Result := TNodes.CreateAssignParse(ParseNode);
   ParseNode.DisplayText := 'decls';
 
   while Lex.Lookahead.Tag = TYPENAME do
@@ -295,11 +308,10 @@ end;
 function TParser.decl: TNodes;
 var
   ParseNode: TParseNode = nil;
-  SyntaxNode: TSyntaxNode = nil;
   HelperString: string;
 
 begin
-  Result := TNodes.CreateAssign(ParseNode, SyntaxNode);
+  Result := TNodes.CreateAssignParse(ParseNode);
   ParseNode.DisplayText := 'decl';
 
   HelperString := Lex.Lookahead.Lexeme;
@@ -322,11 +334,10 @@ function TParser.statements(): TNodes;
   { #todo : add distinction statement vs expression }
 var
   ParseNode: TParseNode = nil;
-  SyntaxNode: TSyntaxNode = nil;
   Nodes: TNodes;
 
 begin
-  Result := TNodes.CreateAssign(ParseNode, SyntaxNode);
+  Result := TNodes.CreateAssignParse(ParseNode);
   ParseNode.DisplayText := 'statements';
 
   while (Lex.Lookahead.Tag <> CURLY_RIGHT) do
@@ -359,11 +370,10 @@ function TParser.expr: TNodes;
 
 var
   ParseNode: TParseNode = nil;
-  SyntaxNode: TSyntaxNode = nil;
   Nodes: TNodes;
 
 begin
-  Result := TNodes.CreateAssign(ParseNode, SyntaxNode);
+  Result := TNodes.CreateAssignParse(ParseNode);
   ParseNode.DisplayText := 'expr';
 
   Nodes := term();
@@ -379,11 +389,10 @@ function TParser.term: TNodes;
 
 var
   ParseNode: TParseNode = nil;
-  SyntaxNode: TSyntaxNode = nil;
   Nodes: TNodes;
 
 begin
-  Result := TNodes.CreateAssign(ParseNode, SyntaxNode);
+  Result := TNodes.CreateAssignParse(ParseNode);
   ParseNode.DisplayText := 'term';
 
   Nodes := factor();
@@ -398,11 +407,10 @@ end;
 function TParser.expr_rest: TNodes;
 var
   ParseNode: TParseNode = nil;
-  SyntaxNode: TSyntaxNode = nil;
   Nodes: TNodes;
 
 begin
-  Result := TNodes.CreateAssign(ParseNode, SyntaxNode);
+  Result := TNodes.CreateAssignParse(ParseNode);
   ParseNode.DisplayText := 'expr_rest';
 
   case Lex.Lookahead.Tag of
@@ -436,10 +444,9 @@ end;
 function TParser.term_rest: TNodes;
 var
   ParseNode: TParseNode = nil;
-  SyntaxNode: TSyntaxNode = nil;
   Nodes: TNodes;
 begin
-  Result := TNodes.CreateAssign(ParseNode, SyntaxNode);
+  Result := TNodes.CreateAssignParse(ParseNode);
   ParseNode.DisplayText := 'term_rest';
   case Lex.Lookahead.Tag of
     MULTIPLY: begin
@@ -472,11 +479,10 @@ end;
 function TParser.factor: TNodes;
 var
   ParseNode: TParseNode = nil;
-  SyntaxNode: TSyntaxNode = nil;
   Nodes: TNodes;
 
 begin
-  Result := TNodes.CreateAssign(ParseNode, SyntaxNode);
+  Result := TNodes.CreateAssignParse(ParseNode);
   ParseNode.DisplayText := 'factor';
 
   case Lex.Lookahead.Tag of
@@ -496,7 +502,6 @@ begin
       Nodes := expr();
       ParseNode.Link(Nodes.ParseNode);
       FreeAndNil(Nodes);
-      //NewNode.DisplayText := Lex.Lookahead.Lexeme;
       ParseNode.AddChildWithText(Lex.Lookahead.Lexeme);
       Lex.Match(RIGHT_PARENS);
     end
