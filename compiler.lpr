@@ -16,7 +16,6 @@ const
 
 
 var
-
   MyParser: TParser;
 
 begin
@@ -27,7 +26,6 @@ begin
   MyParser := TParser.Create;
   MyParser.parse(filename);
   FreeAndNil(MyParser);
-
 
 
 end.

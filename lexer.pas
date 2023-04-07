@@ -17,6 +17,7 @@ type
     Tag: TTokenTag;
     Lexeme: string;
     Value: extended;
+    LexemePosition: array of array [0..1] of integer;
     constructor Create();
   end;
 
@@ -49,6 +50,8 @@ type
     procedure Match(checked_token: TTokenTag);
     procedure IsNumber(negative: boolean);
     function CreateWordsTable: TFPObjectHashTable;
+    procedure WordsIterator(Item: TObject; const key: string; var Continue: boolean);
+
 
   end;
 
@@ -121,11 +124,15 @@ begin
   else
   if (CharPosition - CurrentLineLength) = 1 then CurrentChar := LineEnding
   else
-  if ReadLine() then ReadChar()
+  if ReadLine() then
+  begin
+    CharPosition := 0;
+    ReadChar();
+  end
   else
   begin
     CurrentChar := '';
-    CharPosition:=0;
+    CharPosition := 0;
   end;
 end;
 
@@ -144,17 +151,24 @@ begin
   else
   begin
     PeekedChar := '';
-    CharPosition:=0;
+    CharPosition := 0;
   end;
 
 end;
 
 procedure TLexer.Advance();
+var
+  t: TToken;
+  IdPosition: array [0..1] of integer;
 begin
   ReadChar();
+
   while (CurrentChar <> '') and (IsWhiteSpace(utf8decode(CurrentChar), 1) or
       (CurrentChar = LineEnding)) do
     ReadChar();
+
+  IdPosition[0] := CurrentLineNumber;
+  IdPosition[1] := CharPosition;
   case CurrentChar of
     '+': begin
       Lookahead.Tag := PLUS;
@@ -258,9 +272,20 @@ begin
       PeekChar();
     end;
     if Words.Items[Lookahead.Lexeme] <> nil then
-      Lookahead.Tag := TToken(Words.Items[Lookahead.Lexeme]).Tag
+    begin
+      Lookahead.Tag := TToken(Words.Items[Lookahead.Lexeme]).Tag;
+      insert(IdPosition, TToken(Words.Items[Lookahead.Lexeme]).LexemePosition, MaxInt);
+    end
     else
+    begin
       Lookahead.Tag := IDENTIFIER;
+      t := TToken.Create();
+      t.Lexeme := Lookahead.Lexeme;
+      t.Tag := Lookahead.Tag;
+      insert(IdPosition, t.LexemePosition, MaxInt);
+      Words.Add(Lookahead.Lexeme, t);
+    end;
+
     {todo: finalize token storage for identifiers }
     Exit();
   end;
@@ -338,6 +363,19 @@ begin
     Result.Add(s, t);
   end;
 
+end;
+
+procedure TLexer.WordsIterator(Item: TObject; const key: string; var Continue: boolean);
+var
+  i: integer;
+  ar: array [0..1] of integer;
+begin
+  Write(TToken(Item).Lexeme, ': ');
+  for ar in TToken(Item).LexemePosition do
+  begin
+    Write('(', ar[0], ',', ar[1], ') ');
+  end;
+  writeln();
 end;
 
 

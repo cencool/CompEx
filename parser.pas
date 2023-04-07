@@ -198,7 +198,6 @@ var
 begin
   FreeParseTree(ParseRoot);
 
-
   Lex := TLexer.Create(FileNameToParse);
   Lex.ReadLine();
 
@@ -226,6 +225,8 @@ begin
 
   WriteLn();
   WriteLn('Parsing finished with OK result');
+  WriteLn('Words table content:');
+  Lex.Words.Iterate(@Lex.WordsIterator);
   FreeAndNil(Lex);
 
 end;
