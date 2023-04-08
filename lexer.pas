@@ -134,6 +134,7 @@ begin
     CurrentChar := '';
     CharPosition := 0;
   end;
+  PeekChar();
 end;
 
 { #todo : isn't better to get peek character every time readchar is done ? }
@@ -151,7 +152,6 @@ begin
   else
   begin
     PeekedChar := '';
-    CharPosition := 0;
   end;
 
 end;
@@ -231,25 +231,21 @@ begin
   if IsDigit(utf8decode(CurrentChar), 1) then
   begin
     Lookahead.Lexeme := CurrentChar;
-    PeekChar();
     while (PeekedChar <> '') and (IsDigit(utf8decode(PeekedChar), 1)) and
       (PeekedChar <> '.') do
     begin
       ReadChar();
       Lookahead.Lexeme := Lookahead.Lexeme + CurrentChar;
-      PeekChar();
     end;
     {check for decimal number }
     if PeekedChar = '.' then
     begin
       ReadChar();
       Lookahead.Lexeme := Lookahead.Lexeme + CurrentChar;
-      PeekChar();
       while (PeekedChar <> '') and (IsDigit(utf8decode(PeekedChar), 1)) do
       begin
         ReadChar();
         Lookahead.Lexeme := Lookahead.Lexeme + CurrentChar;
-        PeekChar();
       end;
     end;
     if not (IsLetter(UTF8Decode(PeekedChar), 1)) then
@@ -264,12 +260,10 @@ begin
   if IsLetter(utf8decode(CurrentChar), 1) then
   begin
     Lookahead.Lexeme := CurrentChar;
-    PeekChar();
     while (PeekedChar <> '') and (IsLetterOrDigit(UTF8Decode(PeekedChar), 1)) do
     begin
       ReadChar();
       Lookahead.Lexeme := Lookahead.Lexeme + CurrentChar;
-      PeekChar();
     end;
     if Words.Items[Lookahead.Lexeme] <> nil then
     begin
@@ -320,25 +314,21 @@ begin
     if negative then Lookahead.Lexeme := '-' + CurrentChar
     else
       Lookahead.Lexeme := CurrentChar;
-    PeekChar();
     while (PeekedChar <> '') and (IsDigit(utf8decode(PeekedChar), 1)) and
       (PeekedChar <> '.') do
     begin
       ReadChar();
       Lookahead.Lexeme := Lookahead.Lexeme + CurrentChar;
-      PeekChar();
     end;
     {check for decimal number }
     if PeekedChar = '.' then
     begin
       ReadChar();
       Lookahead.Lexeme := Lookahead.Lexeme + CurrentChar;
-      PeekChar();
       while (PeekedChar <> '') and (IsDigit(utf8decode(PeekedChar), 1)) do
       begin
         ReadChar();
         Lookahead.Lexeme := Lookahead.Lexeme + CurrentChar;
-        PeekChar();
       end;
     end;
     Lookahead.Tag := NUMBER;
@@ -373,6 +363,7 @@ begin
   Write(TToken(Item).Lexeme, ': ');
   for ar in TToken(Item).LexemePosition do
   begin
+    //identifier postions in src text
     Write('(', ar[0], ',', ar[1], ') ');
   end;
   writeln();
