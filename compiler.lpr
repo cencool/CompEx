@@ -14,9 +14,9 @@ uses {$IFDEF UNIX}
 const
   filename = 'in.txt';
 
-
 var
   MyParser: TParser;
+
 
 begin
   if FileExists('heap.trc') then
@@ -26,6 +26,5 @@ begin
   MyParser := TParser.Create;
   MyParser.parse(filename);
   FreeAndNil(MyParser);
-
 
 end.

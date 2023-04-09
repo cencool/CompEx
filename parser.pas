@@ -16,7 +16,8 @@ unit Parser;
 interface
 
 uses
-  Classes;
+  Classes,
+  Contnrs;
 
 type
 
@@ -50,15 +51,33 @@ type
     SyntaxNode: TSyntaxNode;
     constructor Create;
     constructor CreateAssign(var ParseVar: TParseNode; var SyntaxVar: TSyntaxNode);
-    constructor CreateAssignParse(var ParseVar:TParseNode);
+    constructor CreateAssignParse(var ParseVar: TParseNode);
     destructor Destroy; override;
+  end;
+
+  TSymbol = class
+    SymbolType: string;
+    SymbolPosition: array [0..1] of integer;
+  end;
+
+  { TSymbolTable }
+
+  TSymbolTable = class
+    ParentTable: TSymbolTable;
+    Symbols: TFPObjectHashTable;
+    constructor Create(Parent: TSymbolTable);
+    destructor Destroy; override;
+    procedure Add(ALexeme: string; ASymbol: TSymbol);
+    procedure PrintSymbols;
   end;
 
   { TParser }
 
   TParser = class
+  public
     NewNode: TParseNode;
     ParseRoot: TParseNode;
+    SymbolTableCurrent: TSymbolTable;
     { #done : add freeing objects }
 
     constructor Create;
@@ -88,6 +107,36 @@ uses
 
 var
   Lex: TLexer;
+
+{ TSymbolTable }
+
+constructor TSymbolTable.Create(Parent: TSymbolTable);
+begin
+  ParentTable := Parent;
+  Symbols := TFPObjectHashTable.Create();
+end;
+
+destructor TSymbolTable.Destroy;
+begin
+  FreeAndNil(Symbols);
+  inherited Destroy;
+end;
+
+procedure TSymbolTable.Add(ALexeme: string; ASymbol: TSymbol);
+begin
+  Symbols.Add(ALexeme, ASymbol);
+end;
+
+procedure TableIterator(Item: TObject; const key: string; var Continue: boolean);
+begin
+  continue := True;
+  Write(key, ' ', TSymbol(Item).SymbolType + LineEnding);
+end;
+
+procedure TSymbolTable.PrintSymbols;
+begin
+  Symbols.Iterate(@TableIterator);
+end;
 
 { TSyntaxNode }
 
@@ -252,15 +301,19 @@ function TParser.block: TNodes;
 var
   ParseNode: TParseNode = nil;
   Nodes: TNodes;
+  StoredParent: TSymbolTable;
 
 begin
+
   Result := TNodes.CreateAssignParse(ParseNode);
   ParseNode.DisplayText := 'block';
-
 
   case Lex.Lookahead.Tag of
     CURLY_LEFT: begin
       Lex.Match(CURLY_LEFT);
+      // symbol table init
+      StoredParent := SymbolTableCurrent;
+      SymbolTableCurrent := TSymbolTable.Create(StoredParent);
 
       ParseNode.AddChildWithText('{');
 
@@ -275,7 +328,8 @@ begin
       FreeAndNil(Nodes);
       Lex.Match(CURLY_RIGHT);
       ParseNode.AddChildWithText('}');
-
+      SymbolTableCurrent.PrintSymbols;
+      SymbolTableCurrent := StoredParent;
       //writeln('Block end');
     end;
     else
@@ -310,6 +364,7 @@ function TParser.decl: TNodes;
 var
   ParseNode: TParseNode = nil;
   HelperString: string;
+  Symbol: TSymbol;
 
 begin
   Result := TNodes.CreateAssignParse(ParseNode);
@@ -317,10 +372,21 @@ begin
 
   HelperString := Lex.Lookahead.Lexeme;
   Write(Lex.Lookahead.Lexeme, ' ');
+
+  Symbol := TSymbol.Create;
+  Symbol.SymbolType := Lex.Lookahead.Lexeme;
+
   Lex.Match(TYPENAME);
   HelperString := HelperString + ' ' + Lex.Lookahead.Lexeme;
 
   Write(Lex.Lookahead.Lexeme, ' ');
+
+  Symbol.SymbolPosition := TTokenWord(Lex.Lookahead).LexemePosition[0];
+  try
+    SymbolTableCurrent.Add(Lex.Lookahead.Lexeme, Symbol);
+  except
+    on E: EDuplicate do writeln(LineEnding + E.message);
+  end;
 
   Lex.Match(IDENTIFIER);
   Write(Lex.Lookahead.Lexeme + LineEnding);
@@ -355,9 +421,9 @@ begin
         ParseNode.Link(Nodes.ParseNode);
         FreeAndNil(Nodes);
 
-        ParseNode.AddChildWithText(Lex.Lookahead.Lexeme);
-
         Lex.Match(SEMICOLON);
+        ParseNode.AddChildWithText(';');
+
         Writeln(';');
       end;
     end;

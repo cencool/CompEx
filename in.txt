@@ -1,5 +1,10 @@
-{int c;aa;  {
-int c; 2345
-;2-13; }
-23-12;}
+{
+int alfa;
+char beta;
+3 + 1;
+{ bool alfa;
+34-(12/4);
+}
+
+}
 
