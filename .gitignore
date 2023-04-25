@@ -10,5 +10,7 @@ backup/
 *.exe
 compiler
 lib/
+heap.trc
+
 
 

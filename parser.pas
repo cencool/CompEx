@@ -51,6 +51,7 @@ type
     destructor Destroy; override;
     procedure Link(Node: TParseNode);
     procedure AddChildWithText(TextToAdd: string);
+    procedure Print(Node: TParseNode; SpaceCount: word = 0);
   end;
 
   { TSyntaxNode }
@@ -167,7 +168,6 @@ type
     function factor(): TNodes;
     function expr_rest(): TNodes;
     function term_rest(): TNodes;
-    procedure PrintParseTree(Node: TParseNode; space_count: word = 0);
     procedure FreeParseTree(Node: TParseNode);
     function FindSymbol(AIdentifier: string): TSymbol;
   end;
@@ -382,25 +382,6 @@ begin
   inherited Destroy;
 end;
 
-procedure TParser.PrintParseTree(Node: TParseNode; space_count: word);
-var
-  ChildrenCount: integer = 0;
-  i: integer = 0;
-begin
-  if Node <> nil then
-  begin
-    ChildrenCount := Node.ChildrenList.Count;
-    for i := 1 to space_count do
-    begin
-      Write(' ');
-    end;
-    writeln(Node.DisplayText);
-    for i := 0 to (ChildrenCount - 1) do
-    begin
-      PrintParseTree(TParseNode(Node.ChildrenList.Items[i]), space_count + 1);
-    end;
-  end;
-end;
 
 procedure TParser.FreeParseTree(Node: TParseNode);
 var
@@ -476,7 +457,7 @@ begin
       writeln();
       writeln(E.message);
       if Nodes <> nil then
-        PrintParseTree(ParseRoot, 0);
+        ParseRoot.Print(ParseRoot, 0);
 
       FreeAndNil(Lex);
       Exit;
@@ -892,6 +873,26 @@ begin
   Node := TParseNode.Create();
   Node.DisplayText := TextToAdd;
   Link(Node);
+end;
+
+procedure TParseNode.Print(Node: TParseNode; SpaceCount: word);
+var
+  ChildrenCount: integer = 0;
+  i: integer = 0;
+begin
+  if Node <> nil then
+  begin
+    ChildrenCount := Node.ChildrenList.Count;
+    for i := 1 to SpaceCount do
+    begin
+      Write(' ');
+    end;
+    writeln(Node.DisplayText);
+    for i := 0 to (ChildrenCount - 1) do
+    begin
+      Print(TParseNode(Node.ChildrenList.Items[i]), SpaceCount + 1);
+    end;
+  end;
 end;
 
 
