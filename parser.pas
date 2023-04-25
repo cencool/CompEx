@@ -51,7 +51,6 @@ type
     destructor Destroy; override;
     procedure Link(Node: TParseNode);
     procedure AddChildWithText(TextToAdd: string);
-    procedure Print(Node: TParseNode; SpaceCount: word = 0);
   end;
 
   { TSyntaxNode }
@@ -168,6 +167,7 @@ type
     function factor(): TNodes;
     function expr_rest(): TNodes;
     function term_rest(): TNodes;
+    procedure PrintParseTree(Node: TParseNode; SpaceCount : word = 0);
     procedure FreeParseTree(Node: TParseNode);
     function FindSymbol(AIdentifier: string): TSymbol;
   end;
@@ -457,7 +457,7 @@ begin
       writeln();
       writeln(E.message);
       if Nodes <> nil then
-        ParseRoot.Print(ParseRoot, 0);
+        PrintParseTree(ParseRoot);
 
       FreeAndNil(Lex);
       Exit;
@@ -470,6 +470,7 @@ begin
   WriteLn('Parsing finished with OK result');
   WriteLn('Words table content:');
   Lex.Words.Iterate(@Lex.WordsIterator);
+  WriteLn();
   FreeAndNil(Lex);
 
 end;
@@ -792,6 +793,26 @@ begin
   end;
 end;
 
+procedure TParser.PrintParseTree(Node: TParseNode; SpaceCount: word = 0);
+var
+  ChildrenCount: integer = 0;
+  i: integer = 0;
+begin
+  if Node <> nil then
+  begin
+    ChildrenCount := Node.ChildrenList.Count;
+    for i := 1 to SpaceCount do
+    begin
+      Write(' ');
+    end;
+    writeln(Node.DisplayText);
+    for i := 0 to (ChildrenCount - 1) do
+    begin
+      PrintParseTree(TParseNode(Node.ChildrenList.Items[i]), SpaceCount + 1);
+    end;
+  end;
+end;
+
 function TParser.factor: TNodes;
 var
   ParseNode: TParseNode = nil;
@@ -874,27 +895,6 @@ begin
   Node.DisplayText := TextToAdd;
   Link(Node);
 end;
-
-procedure TParseNode.Print(Node: TParseNode; SpaceCount: word);
-var
-  ChildrenCount: integer = 0;
-  i: integer = 0;
-begin
-  if Node <> nil then
-  begin
-    ChildrenCount := Node.ChildrenList.Count;
-    for i := 1 to SpaceCount do
-    begin
-      Write(' ');
-    end;
-    writeln(Node.DisplayText);
-    for i := 0 to (ChildrenCount - 1) do
-    begin
-      Print(TParseNode(Node.ChildrenList.Items[i]), SpaceCount + 1);
-    end;
-  end;
-end;
-
 
 
 end.

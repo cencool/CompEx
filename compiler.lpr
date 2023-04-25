@@ -25,7 +25,7 @@ begin
 
   MyParser := TParser.Create;
   MyParser.parse(filename);
-  MyParser.ParseRoot.Print(MyParser.ParseRoot);
+  MyParser.PrintParseTree(MyParser.ParseRoot);
   MyParser.SyntaxRoot.Gen;
   FreeAndNil(MyParser);
 
