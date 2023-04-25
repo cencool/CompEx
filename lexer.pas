@@ -16,30 +16,11 @@ type
   TToken = class
     Tag: TTokenTag;
     Lexeme: string;
-    constructor Create();
-  end;
-
-  { TTokenSymbol }
-
-  TTokenSymbol = class(TToken)
-    constructor Create(ATag: TTokenTag; ASymbol: string);
-  end;
-
-  { TTokenNumber }
-
-  TTokenNumber = class(TToken)
     Value: extended;
-    constructor Create(ALexeme: string);
-  end;
-
-  { TTokenWord }
-
-  TTokenWord = class(TToken)
     LexemePosition: array of array [0..1] of integer;
-    constructor Create(ATag: TTokenTag; AWord: string);
+
+    constructor Create(ATag: TTokenTag; ALexeme: string);
   end;
-
-
 
 
   { TLexer }
@@ -74,7 +55,7 @@ type
     procedure IsNumber(negative: boolean);
     function InitWordsTable: TFPObjectHashTable;
     procedure WordsIterator(Item: TObject; const key: string; var Continue: boolean);
-    procedure StoreLexemePosition(APosition: TPosition; AToken: TTokenWord);
+    procedure StoreLexemePosition(APosition: TPosition; AToken: TToken);
     property Lookahead: TToken read FLookahead write setLookahead;
 
 
@@ -87,35 +68,6 @@ implementation
 uses
   SysUtils, LazUTF8, Character;
 
-{ TTokenSymbol }
-
-constructor TTokenSymbol.Create(ATag: TTokenTag; ASymbol: string);
-begin
-  inherited Create;
-  Tag := ATag;
-  Lexeme := ASymbol;
-end;
-
-{ TTokenWord }
-
-constructor TTokenWord.Create(ATag: TTokenTag; AWord: string);
-begin
-  //inherited Create(ATag);
-  Tag := ATag;
-  Lexeme := AWord;
-end;
-
-{ TTokenNumber }
-
-constructor TTokenNumber.Create(ALexeme: string);
-begin
-  inherited Create;
-  Tag := NUMBER;
-  Value := StrToFloat(ALexeme);
-  Lexeme:= ALexeme;
-end;
-
-
 procedure TLexer.setLookahead(AValue: TToken);
 begin
   if FLookahead = AValue then Exit;
@@ -127,7 +79,7 @@ constructor TLexer.Create(const SrcFileName: string);
 begin
   SrcLines := TStringList.Create;
   SrcLines.LoadFromFile(SrcFileName);
-  Lookahead := TToken.Create();
+  Lookahead := TToken.Create(NONE, '');
   Words := InitWordsTable;
 end;
 
@@ -219,9 +171,10 @@ end;
 
 procedure TLexer.Advance();
 var
-  t: TTokenWord = nil;
+  t: TToken = nil;
   s: string = '';
   IdPosition: array [0..1] of integer;
+
 begin
   ReadChar();
 
@@ -233,43 +186,43 @@ begin
   IdPosition[1] := CharPosition;
   case CurrentChar of
     '+': begin
-      Lookahead := TTokenSymbol.Create(PLUS, '+');
+      Lookahead := TToken.Create(PLUS, '+');
       Exit();
     end;
     '-': begin
-      Lookahead := TTokenSymbol.Create(MINUS, '-');
+      Lookahead := TToken.Create(MINUS, '-');
       Exit();
     end;
     '*': begin
-      Lookahead := TTokenSymbol.Create(MULTIPLY, '*');
+      Lookahead := TToken.Create(MULTIPLY, '*');
       Exit();
     end;
     '/': begin
-      Lookahead := TTokenSymbol.Create(DIVIDE, '/');
+      Lookahead := TToken.Create(DIVIDE, '/');
       Exit();
     end;
     '(': begin
-      Lookahead := TTokenSymbol.Create(LEFT_PARENS, '(');
+      Lookahead := TToken.Create(LEFT_PARENS, '(');
       Exit();
     end;
     ')': begin
-      Lookahead := TTokenSymbol.Create(RIGHT_PARENS, ')');
+      Lookahead := TToken.Create(RIGHT_PARENS, ')');
       Exit();
     end;
     ';': begin
-      Lookahead := TTokenSymbol.Create(SEMICOLON, ';');
+      Lookahead := TToken.Create(SEMICOLON, ';');
       Exit();
     end;
     '{': begin
-      Lookahead := TTokenSymbol.Create(CURLY_LEFT, '{');
+      Lookahead := TToken.Create(CURLY_LEFT, '{');
       Exit();
     end;
     '}': begin
-      Lookahead := TTokenSymbol.Create(CURLY_RIGHT, '}');
+      Lookahead := TToken.Create(CURLY_RIGHT, '}');
       Exit;
     end;
     '': begin
-      Lookahead := TTokenSymbol.Create(NONE, '');
+      Lookahead := TToken.Create(NONE, '');
       Exit();
     end;
   end;
@@ -297,7 +250,7 @@ begin
     end;
     if not (IsLetter(UTF8Decode(PeekedChar), 1)) then
     begin
-      Lookahead := TTokenNumber.Create(s);
+      Lookahead := TToken.Create(NUMBER, s);
       Exit();
     end;
 
@@ -312,19 +265,19 @@ begin
       s := s + CurrentChar;
     end;
 
-    t := TTokenWord(Words.Items[s]);
+    t := TToken(Words.Items[s]);
     if t <> nil then   // identifier exists ?
     begin
-      Lookahead := TTokenWord.Create(t.tag, s);
+      Lookahead := TToken.Create(t.tag, s);
       StoreLexemePosition(IdPosition, t); // update word table entry
-      StoreLexemePosition(IdPosition, TTokenWord(Lookahead));  //and  to new Lookahead
+      StoreLexemePosition(IdPosition, Lookahead);  //and  to new Lookahead
     end
     else
     begin
-      Lookahead := TTokenWord.Create(IDENTIFIER, s);
-      t := TTokenWord.Create(IDENTIFIER, s);
+      Lookahead := TToken.Create(IDENTIFIER, s);
+      t := TToken.Create(IDENTIFIER, s);
       StoreLexemePosition(IdPosition, t); // update word table entry
-      StoreLexemePosition(IdPosition, TTokenWord(Lookahead));  //and  to new Lookahead
+      StoreLexemePosition(IdPosition, Lookahead);  //and  to new Lookahead
       Words.Add(s, t);
     end;
 
@@ -390,12 +343,12 @@ type
 var
   WordList: TWordList = ('int', 'char', 'bool');
   s: string;
-  t: TTokenWord;
+  t: TToken;
 begin
   Result := TFPObjectHashTable.Create();
   for s in WordList do
   begin
-    t := TTokenWord.Create(TYPENAME, s);
+    t := TToken.Create(TYPENAME, s);
     Result.Add(s, t);
   end;
 
@@ -408,7 +361,7 @@ begin
   Continue := True;
   Write(key, ': ');
 
-  for ar in TTokenWord(Item).LexemePosition do
+  for ar in TToken(Item).LexemePosition do
   begin
     //identifier postions in src text line, col
     Write('(', ar[0], ',', ar[1], ') ');
@@ -416,7 +369,7 @@ begin
   writeln();
 end;
 
-procedure TLexer.StoreLexemePosition(APosition: TPosition; AToken: TTokenWord);
+procedure TLexer.StoreLexemePosition(APosition: TPosition; AToken: TToken);
 begin
   insert(APosition, AToken.LexemePosition, MaxInt);
 end;
@@ -425,9 +378,13 @@ end;
 
 { TToken }
 
-constructor TToken.Create;
+constructor TToken.Create(ATag: TTokenTag; ALexeme: string);
 begin
-  Tag := NONE;
+  Tag := ATag;
+  Lexeme := ALexeme;
+  if ATag = NUMBER then
+    Value := StrToFloat(Lexeme);
+
 end;
 
 end.
