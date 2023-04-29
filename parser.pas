@@ -2,12 +2,14 @@
 Grammar:                               Syntax nodes:
 prg -> block prg                       prg.n = new PrgSeq()
       | block                          prg.n = new PrgSeq()
-block ->   '{' decls statements '}'    block.n = statements.n
+block ->   { decls statements }        block.n = statements.n
 decls -> decl decls                    decls.n = nil
         | @                            decls.n = nil
-decl -> TYPENAME ID ';'                decl.n = nil
+decl -> TYPENAME ID ;                  decl.n = nil
+
 statements -> block                    statements.n = block.n
-            | expr; statements         statements.n = new Seq()
+            | assignment               statements.n = new Seq()
+            | expr ; statements      statements.n = new Seq()
             | @                        statements.n = nil
 expr -> term rest                      expr.n = new Expr(Term();Expr(); nil)
 expr_rest -> + term rest               expr_rest.n = new Expr(Term();Expr(); Lookahead)
@@ -20,11 +22,9 @@ factor -> ID                           factor.n = new Factor (Lookahead)
         | NUMBER                       factor.n = new Factor (Lookahead)
         | ( expr)                      factor.n = expr.n
 
-Implemented:
-Seq
-Expr
-Term
-Factor
+assignment -> ID = expr ;
+
+
 *)
 { #todo : finish grammar comment }
 
@@ -115,6 +115,10 @@ type
     procedure Gen; override;
   end;
 
+  TAssignment = class(TSyntaxNode)
+
+  end;
+
   { TNodes }
 
   TNodes = class
@@ -128,6 +132,7 @@ type
 
   TSymbol = class
     SymbolType: string;
+    SymbolValue: extended;
     SymbolPosition: array [0..1] of integer;
   end;
 
@@ -161,13 +166,14 @@ type
     function block(): TNodes;
     function decls(): TNodes;
     function decl(): TNodes;
+    function assignment(): TNodes;
     function statements(): TNodes;
     function expr(): TNodes;
     function term(): TNodes;
     function factor(): TNodes;
     function expr_rest(): TNodes;
     function term_rest(): TNodes;
-    procedure PrintParseTree(Node: TParseNode; SpaceCount : word = 0);
+    procedure PrintParseTree(Node: TParseNode; SpaceCount: word = 0);
     procedure FreeParseTree(Node: TParseNode);
     function FindSymbol(AIdentifier: string): TSymbol;
   end;
@@ -595,6 +601,23 @@ begin
 
 end;
 
+function TParser.assignment: TNodes;
+var
+  ParseNode: TParseNode = nil;
+  Nodes: TNodes;
+begin
+  Result := TNodes.CreateAssignParse(ParseNode);
+  ParseNode.DisplayText := 'assignment';
+  ParseNode.AddChildWithText(Lex.Lookahead.Lexeme);
+  Lex.Match(IDENTIFIER);
+  ParseNode.AddChildWithText(Lex.Lookahead.Lexeme);
+  Lex.Match(EQUAL_SIGN);
+  Nodes := expr();
+  ParseNode.Link(Nodes.ParseNode);
+  ParseNode.AddChildWithText(Lex.Lookahead.Lexeme);
+  Lex.Match(SEMICOLON);
+end;
+
 function TParser.statements(): TNodes;
   { #todo : add distinction statement vs expression }
 var
@@ -615,20 +638,28 @@ begin
         TSeq(Result.SyntaxNode).Link(Nodes.SyntaxNode);
         FreeAndNil(Nodes);
       end;
+
       else
-      begin
-        Nodes := expr();
-        ParseNode.Link(Nodes.ParseNode);
-        TSeq(Result.SyntaxNode).Link(Nodes.SyntaxNode);
-        FreeAndNil(Nodes);
+        if (Lex.Lookahead.Tag = IDENTIFIER) and (Lex.PeekCharNonWhite() = '=') then
+        begin
+          Nodes := assignment();
+          ParseNode.Link(Nodes.ParseNode);
+          FreeAndNil(Nodes);
+        end
+        else
+        begin
+          Nodes := expr();
+          ParseNode.Link(Nodes.ParseNode);
+          TSeq(Result.SyntaxNode).Link(Nodes.SyntaxNode);
+          FreeAndNil(Nodes);
 
-        Lex.Match(SEMICOLON);
-        TSeq(Result.SyntaxNode).Link(TSemicolon.Create); // workaround to print ';' end of expression
+          Lex.Match(SEMICOLON);
+          TSeq(Result.SyntaxNode).Link(TSemicolon.Create); // workaround to print ';' end of expression
 
-        ParseNode.AddChildWithText(';');
+          ParseNode.AddChildWithText(';');
 
-        Writeln(';');
-      end;
+          Writeln(';');
+        end;
     end;
     //writeln('Statements processed');
 
@@ -840,7 +871,7 @@ begin
       if FindSymbol(Lex.Lookahead.Lexeme) <> nil then
       begin
         s := FindSymbol(Lex.Lookahead.Lexeme).SymbolType;
-        Write(' ' + Lex.Lookahead.lexeme + ':' + s);
+        Write(' ' + Lex.Lookahead.lexeme + ':' + s + ' ');
       end
       else
         raise Exception.Create('(' + IntToStr(row) + ',' + IntToStr(col) +

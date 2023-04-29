@@ -9,7 +9,7 @@ uses
 
 type
   TTokenTag = (NONE, NUMBER, IDENTIFIER, PLUS, MINUS, MULTIPLY, DIVIDE, LEFT_PARENS,
-    RIGHT_PARENS, SEMICOLON, FILE_END, UNKNOWN, CURLY_LEFT, CURLY_RIGHT, TYPENAME);
+    RIGHT_PARENS, SEMICOLON, FILE_END, UNKNOWN, CURLY_LEFT, CURLY_RIGHT, TYPENAME, EQUAL_SIGN);
 
   { TToken }
 
@@ -50,6 +50,7 @@ type
     function PeekLine(src: TStringList): boolean;
     procedure ReadChar();
     procedure PeekChar();
+    function PeekCharNonWhite(): string;
     procedure Advance();
     procedure Match(checked_token: TTokenTag);
     procedure IsNumber(negative: boolean);
@@ -147,7 +148,7 @@ begin
     CurrentChar := '';
     CharPosition := 0;
   end;
-  PeekChar();
+  PeekChar();  // peek char automatically with read char
 end;
 
 { #done : isn't better to get peek character every time readchar is done ? }
@@ -161,12 +162,57 @@ begin
   if PeekLine(SrcLines) then
   begin
     PeekedChar := UTF8copy(PeekedLine, 1, 1);
+    { #todo : peekchar how about if next line is just newline ? }
   end
   else
   begin
     PeekedChar := '';
   end;
 
+end;
+
+{ returns first non-white character after current char or empty string if none }
+function TLexer.PeekCharNonWhite: string;
+var
+  PeekPosition: integer;
+  PeekLineLength: integer;
+  PeekLineNumber: integer;
+  _PeekLine: string;
+
+begin
+  Result := '';
+  PeekPosition := CharPosition + 1;
+  PeekLineLength := CurrentLineLength;
+  PeekLineNumber := CurrentLineNumber;
+  _PeekLine := CurrentLine;
+
+  repeat
+
+    if PeekPosition <= PeekLineLength then
+    begin
+      Result := UTF8copy(_PeekLine, PeekPosition, 1);
+    end
+    else
+    if PeekPosition > PeekLineLength then
+    begin
+      PeekPosition := 1;
+      if PeekLineNumber < SrcLines.Count then
+      begin
+        _PeekLine := SrcLines.Strings[PeekLineNumber];
+        PeekLineLength := UTF8Length(_PeekLine);
+        Inc(PeekLineNumber);
+        if PeekLineLength = 0 then Result := LineEnding
+        else
+          Result := UTF8copy(_PeekLine, PeekPosition, 1);
+      end
+      else
+      begin
+        Result := '';
+      end;
+    end;
+    Inc(PeekPosition);
+
+  until (Result = '') or (not IsWhiteSpace(utf8decode(Result), 1));
 end;
 
 procedure TLexer.Advance();
@@ -219,6 +265,10 @@ begin
     end;
     '}': begin
       Lookahead := TToken.Create(CURLY_RIGHT, '}');
+      Exit;
+    end;
+    '=': begin
+      Lookahead := TToken.Create(EQUAL_SIGN, '=');
       Exit;
     end;
     '': begin
@@ -278,7 +328,7 @@ begin
       t := TToken.Create(IDENTIFIER, s);
       StoreLexemePosition(IdPosition, t); // update word table entry
       StoreLexemePosition(IdPosition, Lookahead);  //and  to new Lookahead
-      Words.Add(s, t);
+      Words.Add(s, t);  // add new identifier to words table
     end;
 
     {todo: finalize token storage for identifiers }
@@ -339,9 +389,9 @@ end;
 
 function TLexer.InitWordsTable: TFPObjectHashTable;
 type
-  TWordList = array [0..2] of string;
+  TWordList = array [0..3] of string;
 var
-  WordList: TWordList = ('int', 'char', 'bool');
+  WordList: TWordList = ('int', 'char', 'bool','decimal');
   s: string;
   t: TToken;
 begin
