@@ -25,8 +25,12 @@ begin
 
   MyParser := TParser.Create;
   MyParser.parse(filename);
+  Writeln('PARSE TREE:');
   MyParser.PrintParseTree(MyParser.ParseRoot);
+  WriteLn();
+  Writeln('TRANSLATION TO POSTFIX');
   MyParser.SyntaxRoot.Gen;
+  Writeln();
   FreeAndNil(MyParser);
 
 end.

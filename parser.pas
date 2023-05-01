@@ -108,7 +108,8 @@ type
   TFactor = class(TSyntaxNode)
     FTokenTag: TTokenTag;
     FTokenLexeme: string;
-    constructor Create(AToken: TToken);
+    FFactorValue: extended;
+    constructor Create(AToken: TToken; AValue: extended = 0);
     procedure Gen; override;
     function Eval(AInputValue: extended = 0): extended; override;
   end;
@@ -119,10 +120,14 @@ type
     procedure Gen; override;
   end;
 
+  { TAssign }
+
   TAssign = class(TSyntaxNode)
     { #todo co vlastne chcem aby robil ? }
-    FLeftValue: string;
-    FRightVale: integer;
+    FLeftSide: string;
+    FRightSide: TExpr;
+    constructor Create(ALeftSide: string; ARightSide: TExpr = nil);
+    procedure Gen; override;
 
   end;
 
@@ -140,6 +145,7 @@ type
   TSymbol = class
     SymbolType: string;
     SymbolValue: extended;
+    isAssigned: boolean;
     SymbolPosition: array [0..1] of integer;
   end;
 
@@ -194,6 +200,21 @@ uses
 var
   Lex: TLexer;
 
+{ TAssign }
+
+constructor TAssign.Create(ALeftSide: string; ARightSide: TExpr = nil);
+begin
+  FLeftSide := ALeftSide;
+  FRightSide := ARightSide;
+end;
+
+procedure TAssign.Gen;
+begin
+  Write(' '+FLeftSide + ' = ');
+  FRightSide.Gen;
+  Write(';' + LineEnding);
+end;
+
 { TSemicolon }
 
 procedure TSemicolon.Gen;
@@ -225,10 +246,11 @@ end;
 
 { TFactor }
 
-constructor TFactor.Create(AToken: TToken);
+constructor TFactor.Create(AToken: TToken; Avalue: extended = 0);
 begin
   FTokenTag := AToken.Tag;
   FTokenLexeme := AToken.Lexeme;
+  FFactorValue := Avalue;
 end;
 
 procedure TFactor.Gen;
@@ -243,7 +265,7 @@ begin
       Result := StrToFloat(FTokenLexeme);
     end;
     IDENTIFIER: begin
-      Result := 1;
+      Result := FFactorValue;
     end;
   end;
 end;
@@ -408,7 +430,7 @@ end;
 
 procedure TSyntaxNode.Gen;
 begin
-
+  { each node has to implement its Gen method }
 end;
 
 function TSyntaxNode.Eval(AInputValue: extended = 0): extended;
@@ -534,8 +556,8 @@ begin
   //SyntaxRoot.Gen;
 
   WriteLn();
-  WriteLn('Parsing finished with OK result');
-  WriteLn('Words table content:');
+  WriteLn('Parsing finished with OK result' + LineEnding);
+  WriteLn('WORDS TABLE CONTENT:');
   Lex.Words.Iterate(@Lex.WordsIterator);
   WriteLn();
   FreeAndNil(Lex);
@@ -593,9 +615,7 @@ begin
       FreeAndNil(Nodes);
       Lex.Match(CURLY_RIGHT);
       ParseNode.AddChildWithText('}');
-      //SymbolTableCurrent.PrintSymbols;
       SymbolTableCurrent := StoredParent;
-      //writeln('Block end');
     end;
     else
     begin
@@ -636,15 +656,12 @@ begin
   ParseNode.DisplayText := 'decl';
 
   HelperString := Lex.Lookahead.Lexeme;
-  Write(Lex.Lookahead.Lexeme, ' ');
 
   Symbol := TSymbol.Create;
   Symbol.SymbolType := Lex.Lookahead.Lexeme;
 
   Lex.Match(TYPENAME);
   HelperString := HelperString + ' ' + Lex.Lookahead.Lexeme;
-
-  Write(Lex.Lookahead.Lexeme, ' ');
 
   Symbol.SymbolPosition := Lex.Lookahead.LexemePosition[0];
   try
@@ -654,7 +671,6 @@ begin
   end;
 
   Lex.Match(IDENTIFIER);
-  Write(Lex.Lookahead.Lexeme + LineEnding);
   HelperString := HelperString + ' ' + Lex.Lookahead.Lexeme;
 
   Lex.Match(SEMICOLON);
@@ -666,16 +682,32 @@ function TParser.assignment: TNodes;
 var
   ParseNode: TParseNode = nil;
   Nodes: TNodes;
+  Symbol: TSymbol;
 begin
   Result := TNodes.CreateAssignParse(ParseNode);
   ParseNode.DisplayText := 'assignment';
   ParseNode.AddChildWithText(Lex.Lookahead.Lexeme);
+  Symbol := FindSymbol(Lex.Lookahead.Lexeme);
+  if Symbol = nil then
+  begin
+    raise Exception.Create('Identifier: ' + Lex.Lookahead.Lexeme + ' not declared!');
+  end;
+  Result.SyntaxNode := TAssign.Create(Lex.Lookahead.Lexeme);
   Lex.Match(IDENTIFIER);
   ParseNode.AddChildWithText(Lex.Lookahead.Lexeme);
+
   Lex.Match(EQUAL_SIGN);
   Nodes := expr();
+
+  TAssign(Result.SyntaxNode).FRightSide := TExpr(Nodes.SyntaxNode);
+
+  Nodes.SyntaxNode.Gen; // just checking if eval working well
+
   ParseNode.Link(Nodes.ParseNode);
   ParseNode.AddChildWithText(Lex.Lookahead.Lexeme);
+  Symbol.SymbolValue := Nodes.SyntaxNode.Eval();
+  Symbol.isAssigned := True;
+  FreeAndNil(Nodes);
   Lex.Match(SEMICOLON);
 end;
 
@@ -706,6 +738,7 @@ begin
         begin
           Nodes := assignment();
           ParseNode.Link(Nodes.ParseNode);
+          TSeq(Result.SyntaxNode).Link(Nodes.SyntaxNode);
           FreeAndNil(Nodes);
         end
         else
@@ -722,7 +755,7 @@ begin
           ParseNode.AddChildWithText(';');
 
           Writeln(' = ' + FloatToStr(ExprNode.eval())); // temporary for checking expr. eval
-          Writeln(';');
+          //Writeln(';');
         end;
     end;
     //writeln('Statements processed');
@@ -810,7 +843,7 @@ begin
 
       Result.SyntaxNode := TExpr.Create(ATerm, AExpr, AToken);
 
-      Write('+'); //postfix semantic action
+      //Write('+'); //postfix semantic action
     end;
     MINUS: begin
       ParseNode.AddChildWithText(Lex.Lookahead.Lexeme);
@@ -829,7 +862,7 @@ begin
       Result.SyntaxNode := TExpr.Create(ATerm, AExpr, AToken);
 
 
-      Write('-');     //postfix semantic action
+      //Write('-');     //postfix semantic action
     end;
 
   end;
@@ -854,7 +887,7 @@ begin
       Nodes := factor();
       ParseNode.Link(Nodes.ParseNode);
       AFactor := Nodes.SyntaxNode;
-      Write('*');    //postfix semantic action
+      //Write('*');    //postfix semantic action
 
       FreeAndNil(Nodes);
       Nodes := term_rest();
@@ -874,7 +907,7 @@ begin
 
       ParseNode.Link(Nodes.ParseNode);
       AFactor := Nodes.SyntaxNode;
-      Write('/');        //postfix semantic action
+      //Write('/');        //postfix semantic action
 
       FreeAndNil(Nodes);
       Nodes := term_rest();
@@ -914,6 +947,7 @@ var
   ParseNode: TParseNode = nil;
   Nodes: TNodes;
   s: string;
+  _Symbol: TSymbol;
   row: integer;
   col: integer;
 
@@ -924,7 +958,7 @@ begin
   case Lex.Lookahead.Tag of
     NUMBER: begin
       ParseNode.AddChildWithText(Lex.Lookahead.Lexeme);
-      Write(' ' + Lex.Lookahead.Lexeme + ' ');
+      //Write(' ' + Lex.Lookahead.Lexeme + ' ');
       Result.SyntaxNode := TFactor.Create(Lex.Lookahead);
       Lex.Match(NUMBER);
     end;
@@ -933,15 +967,18 @@ begin
       ParseNode.AddChildWithText(Lex.Lookahead.Lexeme);
       row := Lex.Lookahead.LexemePosition[0][0];
       col := Lex.Lookahead.LexemePosition[0][1];
-      if FindSymbol(Lex.Lookahead.Lexeme) <> nil then
+      _Symbol := FindSymbol(Lex.Lookahead.Lexeme);
+      if _Symbol <> nil then
       begin
-        s := FindSymbol(Lex.Lookahead.Lexeme).SymbolType;
-        Write(' ' + Lex.Lookahead.lexeme + ':' + s + ' ');
+        s := _Symbol.SymbolType;
+        //Write(' ' + Lex.Lookahead.lexeme + ':' + s + ' ');
       end
       else
         raise Exception.Create('(' + IntToStr(row) + ',' + IntToStr(col) +
           ')' + ' Identifier ' + Lex.Lookahead.Lexeme + ' is not declared');
-      Result.SyntaxNode := TFactor.Create(Lex.Lookahead);
+      if _Symbol.isAssigned <> True then
+        raise Exception.Create(Lex.Lookahead.Lexeme + ' is not assigned a value after declaration!');
+      Result.SyntaxNode := TFactor.Create(Lex.Lookahead, _Symbol.SymbolValue);
       Lex.Match(IDENTIFIER);
     end;
     LEFT_PARENS: begin

@@ -389,9 +389,9 @@ end;
 
 function TLexer.InitWordsTable: TFPObjectHashTable;
 type
-  TWordList = array [0..3] of string;
+  TWordList = array [0..2] of string;
 var
-  WordList: TWordList = ('int', 'char', 'bool','decimal');
+  WordList: TWordList = ('num', 'char', 'bool');
   s: string;
   t: TToken;
 begin
@@ -409,7 +409,7 @@ var
   ar: array [0..1] of integer;
 begin
   Continue := True;
-  Write(key, ': ');
+  Write(key, ' : ');
 
   for ar in TToken(Item).LexemePosition do
   begin
