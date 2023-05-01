@@ -27,7 +27,7 @@ assignment -> ID = expr ;
 
 *)
 { #todo : finish grammar comment }
-
+{ #todo : zda sa ze prepis do postscript notacie pre napr. 1/2*3 nie je dobre }
 unit Parser;
 
 {$mode ObjFPC}{$H+}
@@ -57,6 +57,7 @@ type
 
   TSyntaxNode = class
     procedure Gen; virtual;
+    function Eval(AInputValue: extended = 0): extended; virtual;
     destructor Destroy; override;
   end;
 
@@ -69,6 +70,7 @@ type
     FTokenLexeme: string;
     constructor Create(ATerm: TSyntaxNode; AExpr: TSyntaxNode; AOpToken: TToken = nil);
     procedure Gen; override;
+    function Eval(AInputValue: extended = 0): extended; override;
   end;
 
   { TTermNode }
@@ -80,6 +82,7 @@ type
     FTokenLexeme: string;
     constructor Create(AFactor: TSyntaxNode; ATerm: TSyntaxNode; AOpToken: TToken = nil);
     procedure Gen; override;
+    function Eval(AInputValue: extended = 0): extended; override;
   end;
 
   { TPrgSeq }
@@ -107,6 +110,7 @@ type
     FTokenLexeme: string;
     constructor Create(AToken: TToken);
     procedure Gen; override;
+    function Eval(AInputValue: extended = 0): extended; override;
   end;
 
   { TSemicolon }
@@ -115,7 +119,10 @@ type
     procedure Gen; override;
   end;
 
-  TAssignment = class(TSyntaxNode)
+  TAssign = class(TSyntaxNode)
+    { #todo co vlastne chcem aby robil ? }
+    FLeftValue: string;
+    FRightVale: integer;
 
   end;
 
@@ -229,6 +236,18 @@ begin
   Write(' ' + FTokenLexeme + ' ');
 end;
 
+function TFactor.Eval(AInputValue: extended): extended;
+begin
+  case FTokenTag of
+    NUMBER: begin
+      Result := StrToFloat(FTokenLexeme);
+    end;
+    IDENTIFIER: begin
+      Result := 1;
+    end;
+  end;
+end;
+
 { TSequence }
 
 constructor TSeq.Create;
@@ -276,9 +295,28 @@ end;
 procedure TExpr.Gen;
 begin
   if FTerm <> nil then FTerm.Gen;
+  if FTokenTag <> NONE then Write(' ' + FTokenLexeme + ' '); // for correct postfix order
   if FExpr <> nil then FExpr.Gen;
-  if FTokenTag <> NONE then
-    Write(' ' + FTokenLexeme + ' ');
+
+end;
+
+function TExpr.Eval(AInputValue: extended = 0): extended;
+begin
+  { building result of expression based on available components of exp }
+  Result := FTerm.Eval();
+  case FTokenTag of
+    PLUS: begin
+      Result := AInputValue + Result;
+    end;
+    MINUS: begin
+      Result := AInputValue - Result;
+    end;
+  end;
+  if FExpr <> nil then
+  begin
+    Result := FExpr.eval(Result);
+  end;
+
 end;
 
 { TTerm }
@@ -305,8 +343,27 @@ end;
 procedure TTerm.Gen;
 begin
   if FFactor <> nil then FFactor.Gen;
+
+  if FTokenTag <> NONE then Write(' ' + FTokenLexeme + ' '); //for correct postfix order 1/2*3
+
   if FTerm <> nil then FTerm.Gen;
-  if FTokenTag <> NONE then Write(' ' + FTokenLexeme + ' ');
+end;
+
+function TTerm.Eval(AInputValue: extended = 0): extended;
+begin
+  Result := FFactor.eval();
+  case FTokenTag of
+    MULTIPLY: begin
+      Result := AInputValue * Result;
+    end;
+    DIVIDE: begin
+      Result := AInputValue / Result;
+    end;
+  end;
+  if FTerm <> nil then
+  begin
+    Result := FTerm.eval(Result);
+  end;
 end;
 
 
@@ -354,6 +411,10 @@ begin
 
 end;
 
+function TSyntaxNode.Eval(AInputValue: extended = 0): extended;
+begin
+  Result := 0;
+end;
 
 
 destructor TSyntaxNode.Destroy;
@@ -623,6 +684,7 @@ function TParser.statements(): TNodes;
 var
   ParseNode: TParseNode = nil;
   Nodes: TNodes;
+  ExprNode: TSyntaxNode;
 
 begin
   Result := TNodes.CreateAssignParse(ParseNode);
@@ -651,6 +713,7 @@ begin
           Nodes := expr();
           ParseNode.Link(Nodes.ParseNode);
           TSeq(Result.SyntaxNode).Link(Nodes.SyntaxNode);
+          ExprNode := Nodes.SyntaxNode;
           FreeAndNil(Nodes);
 
           Lex.Match(SEMICOLON);
@@ -658,6 +721,7 @@ begin
 
           ParseNode.AddChildWithText(';');
 
+          Writeln(' = ' + FloatToStr(ExprNode.eval())); // temporary for checking expr. eval
           Writeln(';');
         end;
     end;
@@ -790,6 +854,8 @@ begin
       Nodes := factor();
       ParseNode.Link(Nodes.ParseNode);
       AFactor := Nodes.SyntaxNode;
+      Write('*');    //postfix semantic action
+
       FreeAndNil(Nodes);
       Nodes := term_rest();
       ParseNode.Link(Nodes.ParseNode);
@@ -798,7 +864,6 @@ begin
 
       Result.SyntaxNode := TTerm.Create(AFactor, ATerm, AToken);
 
-      Write('*');    //postfix semantic action
     end;
     DIVIDE: begin
       ParseNode.AddChildWithText(Lex.Lookahead.Lexeme);
@@ -809,6 +874,7 @@ begin
 
       ParseNode.Link(Nodes.ParseNode);
       AFactor := Nodes.SyntaxNode;
+      Write('/');        //postfix semantic action
 
       FreeAndNil(Nodes);
       Nodes := term_rest();
@@ -818,7 +884,6 @@ begin
 
       Result.SyntaxNode := TTerm.Create(AFactor, ATerm, AToken);
 
-      Write('/');        //postfix semantic action
     end;
 
   end;
