@@ -210,7 +210,7 @@ end;
 
 procedure TAssign.Gen;
 begin
-  Write(' '+FLeftSide + ' = ');
+  Write(' ' + FLeftSide + ' = ');
   FRightSide.Gen;
   Write(';' + LineEnding);
 end;
@@ -419,7 +419,7 @@ end;
 procedure TableIterator(Item: TObject; const key: string; var Continue: boolean);
 begin
   continue := True;
-  Write(key, ' ', TSymbol(Item).SymbolType + LineEnding);
+  Write(key, ' ', TSymbol(Item).SymbolType + ':' + FloatToStr(TSymbol(Item).SymbolValue) + LineEnding);
 end;
 
 procedure TSymbolTable.PrintSymbols;
@@ -549,7 +549,10 @@ begin
         PrintParseTree(ParseRoot);
 
       FreeAndNil(Lex);
+      raise;
+
       Exit;
+
     end;
   end;
   //PrintParseTree(ParseRoot, 0);
@@ -615,6 +618,8 @@ begin
       FreeAndNil(Nodes);
       Lex.Match(CURLY_RIGHT);
       ParseNode.AddChildWithText('}');
+      writeln('Identifier values on block exit:');
+      SymbolTableCurrent.PrintSymbols; // show current types and values b4 block exit
       SymbolTableCurrent := StoredParent;
     end;
     else
@@ -695,13 +700,10 @@ begin
   Result.SyntaxNode := TAssign.Create(Lex.Lookahead.Lexeme);
   Lex.Match(IDENTIFIER);
   ParseNode.AddChildWithText(Lex.Lookahead.Lexeme);
-
   Lex.Match(EQUAL_SIGN);
   Nodes := expr();
 
   TAssign(Result.SyntaxNode).FRightSide := TExpr(Nodes.SyntaxNode);
-
-  Nodes.SyntaxNode.Gen; // just checking if eval working well
 
   ParseNode.Link(Nodes.ParseNode);
   ParseNode.AddChildWithText(Lex.Lookahead.Lexeme);
@@ -753,9 +755,6 @@ begin
           TSeq(Result.SyntaxNode).Link(TSemicolon.Create); // workaround to print ';' end of expression
 
           ParseNode.AddChildWithText(';');
-
-          Writeln(' = ' + FloatToStr(ExprNode.eval())); // temporary for checking expr. eval
-          //Writeln(';');
         end;
     end;
     //writeln('Statements processed');
@@ -843,7 +842,6 @@ begin
 
       Result.SyntaxNode := TExpr.Create(ATerm, AExpr, AToken);
 
-      //Write('+'); //postfix semantic action
     end;
     MINUS: begin
       ParseNode.AddChildWithText(Lex.Lookahead.Lexeme);
@@ -861,8 +859,6 @@ begin
 
       Result.SyntaxNode := TExpr.Create(ATerm, AExpr, AToken);
 
-
-      //Write('-');     //postfix semantic action
     end;
 
   end;
@@ -887,7 +883,6 @@ begin
       Nodes := factor();
       ParseNode.Link(Nodes.ParseNode);
       AFactor := Nodes.SyntaxNode;
-      //Write('*');    //postfix semantic action
 
       FreeAndNil(Nodes);
       Nodes := term_rest();
@@ -907,7 +902,6 @@ begin
 
       ParseNode.Link(Nodes.ParseNode);
       AFactor := Nodes.SyntaxNode;
-      //Write('/');        //postfix semantic action
 
       FreeAndNil(Nodes);
       Nodes := term_rest();
@@ -958,7 +952,6 @@ begin
   case Lex.Lookahead.Tag of
     NUMBER: begin
       ParseNode.AddChildWithText(Lex.Lookahead.Lexeme);
-      //Write(' ' + Lex.Lookahead.Lexeme + ' ');
       Result.SyntaxNode := TFactor.Create(Lex.Lookahead);
       Lex.Match(NUMBER);
     end;
@@ -971,13 +964,12 @@ begin
       if _Symbol <> nil then
       begin
         s := _Symbol.SymbolType;
-        //Write(' ' + Lex.Lookahead.lexeme + ':' + s + ' ');
       end
       else
         raise Exception.Create('(' + IntToStr(row) + ',' + IntToStr(col) +
           ')' + ' Identifier ' + Lex.Lookahead.Lexeme + ' is not declared');
       if _Symbol.isAssigned <> True then
-        raise Exception.Create(Lex.Lookahead.Lexeme + ' is not assigned a value after declaration!');
+        raise Exception.Create('@(' + IntToStr(row) + ',' + IntToStr(col) + ') ' + '"' + Lex.Lookahead.Lexeme + '"' + ' is used in expression without being assigned a value!');
       Result.SyntaxNode := TFactor.Create(Lex.Lookahead, _Symbol.SymbolValue);
       Lex.Match(IDENTIFIER);
     end;
@@ -993,9 +985,7 @@ begin
     end
     else
     begin
-      raise Exception.Create('Syntax error in : ' +
-        IntToStr(Lex.CurrentLineNumber) + ',' + IntToStr(Lex.CharPosition) +
-        LineEnding + 'Num or Identifier or Left parens expected' +
+      raise Exception.Create('@(' + IntToStr(Lex.CurrentLineNumber) + ',' + IntToStr(Lex.CharPosition) + ')' + ' Num or Identifier or Left parens expected' +
         LineEnding + Lex.CurrentLine);
     end;
   end;
